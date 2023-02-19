@@ -8,9 +8,7 @@ import { inject, injectable } from 'inversify'
 
 @injectable()
 export class AppPresenter {
-  get currentRoute() {
-    return this.router.currentRoute
-  }
+ 
 
   constructor( 
     @inject(MessagesRepository) private messagesRepository: MessagesRepository,
@@ -19,6 +17,10 @@ export class AppPresenter {
     makeObservable(this, {
       currentRoute: computed
     })
+  }
+
+   get currentRoute() {
+    return this.router.currentRoute
   }
 
   load = (onRouteChange: any) => {

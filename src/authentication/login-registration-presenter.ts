@@ -20,6 +20,7 @@ export class LoginRegisterPresenter {
       email: observable,
       password: observable,
       option: observable,
+      login: action,
       register: action,
       resetValues: action,
     });
