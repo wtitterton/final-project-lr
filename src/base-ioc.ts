@@ -1,8 +1,8 @@
 import { Container } from 'inversify'
-import { MessagesRepository } from './src/core'
-import { RouterRepository } from './src/routing'
-import { NavigationRepository } from './src/navigation/navigation-repository'
-import { UserModel } from './src/authentication'
+import { MessagesRepository } from './core'
+import { Router, RouterRepository } from './routing'
+import { NavigationRepository } from './navigation'
+import { UserModel } from './authentication'
 
 export class BaseIOC {
   container;
@@ -19,7 +19,7 @@ export class BaseIOC {
     this.container.bind(RouterRepository).to(RouterRepository).inSingletonScope()
     this.container.bind(NavigationRepository).to(NavigationRepository).inSingletonScope()
     this.container.bind(UserModel).to(UserModel).inSingletonScope()
-    
+    console.log('container');
     return this.container
   }
 }
