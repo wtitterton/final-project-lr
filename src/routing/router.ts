@@ -6,9 +6,6 @@ import { UserModel } from '../authentication'
 
 @injectable()
 export class Router {
-    get currentRoute() {
-        return this.routerRepository.currentRoute
-    }
   
  constructor( 
     @inject(RouterRepository) private routerRepository: RouterRepository,
@@ -19,6 +16,10 @@ export class Router {
       updateCurrentRoute: action
     })
   }
+
+   get currentRoute() {
+        return this.routerRepository.currentRoute
+    }
 
   
   updateCurrentRoute = async (newRouteId: string, params?: string, query?: string) => {

@@ -8,7 +8,6 @@ export interface Route {
     query?: string;
     onEnter?: () => void;
     onLeave?: () => void;
-     
 }
 
 export const routes = [

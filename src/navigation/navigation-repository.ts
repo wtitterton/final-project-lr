@@ -8,6 +8,13 @@ export class NavigationRepository {
 //   @inject(AuthenticationRepository)
 //   authenticationRepository
 
+constructor(@inject(Router) private router: Router) {
+    makeObservable(this, {
+      currentNode: computed,
+      back: action
+    })
+  }
+
   get currentNode() {
     var self = this
     return this.getTree().all(function (node) {
@@ -15,12 +22,7 @@ export class NavigationRepository {
     })[0]
   }
 
-  constructor(@inject(Router) private router: Router) {
-    makeObservable(this, {
-      currentNode: computed,
-      back: action
-    })
-  }
+  
 
   getTree() {
     let tree = new TreeModel()
