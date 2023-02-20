@@ -129,7 +129,10 @@ constructor(@inject(Router) private router: Router) {
 
   back = () => {
     let currentNode = this.currentNode
-    console.log(currentNode.parent);
+    if(currentNode.hasChildren()) {
+       this.router.goToId(currentNode.parent.parent.model.id)
+    }
+    
     this.router.goToId(currentNode.parent.model.id)
   }
 }

@@ -17,9 +17,11 @@ export class NavigationPresenter {
     
     if (currentNode) {
        vm.currentSelectedVisibleName = this.visibleName(currentNode);
-       console.log(currentNode);
        vm.menuItems = currentNode.children.map((node: any) => {
-       return node;
+       return {
+        ...node,
+        parent: currentNode
+      };
       })
 
       if (currentNode.parent) {
