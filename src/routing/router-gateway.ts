@@ -3,13 +3,13 @@ import Navigo from 'navigo'
 
 @injectable()
 export class RouterGateway {
-  navigo: any
-
+  navigo: Navigo
+ 
   registerRoutes = async (routeConfig: any) => {
     if (this.navigo) return new Promise((resolve) => setTimeout(resolve, 0))
     this.navigo = new Navigo('/')
     let self = this.navigo
-    self
+    this.navigo
       .on(routeConfig)
       .notFound(() => {})
       .resolve()
@@ -22,6 +22,6 @@ export class RouterGateway {
   }
 
   goToId = async (name: string, queryString?: string) => {
-    this.navigo.navigateByName(name, queryString)
+    this.navigo.navigateByName(name, queryString);
   }
 }
