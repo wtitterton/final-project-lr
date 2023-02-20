@@ -17,7 +17,6 @@ export const Navigation = observer((props: any) => {
                 {navigationPresenter.viewModel.currentSelectedVisibleName}
           </div>
           {navigationPresenter.viewModel.menuItems.map((node: any, i: number) => {
-            // console.log(node);
             return node.model.type === "expand" ? <NavigationListExpandable key={i} node={node} /> : <NavigationList key={i} node={node} />
           })}
         </>
