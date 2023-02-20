@@ -8,8 +8,6 @@ import { inject, injectable } from 'inversify'
 
 @injectable()
 export class AppPresenter {
- 
-
   constructor( 
     @inject(MessagesRepository) private messagesRepository: MessagesRepository,
     @inject(Router) private router: Router
