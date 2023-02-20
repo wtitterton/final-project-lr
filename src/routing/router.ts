@@ -1,3 +1,4 @@
+import 'reflect-metadata'
 import { inject, injectable } from 'inversify'
 import { makeObservable, computed, action } from 'mobx'
 import { MessagesRepository } from '../core'
@@ -6,10 +7,10 @@ import { UserModel } from '../authentication'
 
 @injectable()
 export class Router {
-  
  constructor( 
-    @inject(RouterRepository) private routerRepository: RouterRepository,
-    @inject(UserModel) private userModel: UserModel
+   @inject(RouterRepository) private routerRepository: RouterRepository,
+  // @inject(UserModel) private userModel: UserModel,
+   @inject(MessagesRepository) private messageRepository: MessagesRepository
   ) {
     makeObservable(this, {
       currentRoute: computed,
@@ -23,9 +24,10 @@ export class Router {
 
   
   updateCurrentRoute = async (newRouteId: string, params?: string, query?: string) => {
+    console.log(this.currentRoute.routeId);
     let oldRoute = this.routerRepository.findRoute(this.currentRoute.routeId ?? "")
     let newRoute = this.routerRepository.findRoute(newRouteId)
-    const hasToken = !!this.userModel.token
+    const hasToken = false; //!!this.userModel.token
     const routeChanged = oldRoute.routeId !== newRoute.routeId
     const protectedOrUnauthenticatedRoute =
       (newRoute.routeDef.isSecure && hasToken === false) || newRoute.routeDef.path === '*'

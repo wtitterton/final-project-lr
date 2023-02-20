@@ -6,7 +6,7 @@ import { NavigationList } from './navigation-list'
 import { NavigationListExpandable } from './navigation-list-expandable'
 import { BackToTop } from './back-to-top'
 import { Logout } from './logout'
-import { Router } from '../routing'
+
 export const Navigation = observer((props: any) => {
     const navigationPresenter = useInjection(NavigationPresenter);
   return (
@@ -14,7 +14,7 @@ export const Navigation = observer((props: any) => {
       <div className="navigation-container">
         <>
           <div className="navigation-item-header" style={{ backgroundColor: '#5BCA06' }}>
-                {props.presenter.viewModel.currentSelectedVisibleName}
+                {navigationPresenter.viewModel.currentSelectedVisibleName}
           </div>
           {navigationPresenter.viewModel.menuItems.map((node: any, i: number) => {
             return node.model.type === "expand" ? <NavigationListExpandable key={i} node={node} /> : <NavigationList key={i} node={node} />

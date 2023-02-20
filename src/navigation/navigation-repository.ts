@@ -16,13 +16,12 @@ constructor(@inject(Router) private router: Router) {
   }
 
   get currentNode() {
+    console.log('getting current node');
     var self = this
     return this.getTree().all(function (node) {
       return node.model.id === self.router.currentRoute.routeId
     })[0]
   }
-
-  
 
   getTree() {
     let tree = new TreeModel()
