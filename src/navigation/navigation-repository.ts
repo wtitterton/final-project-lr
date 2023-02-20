@@ -16,7 +16,6 @@ constructor(@inject(Router) private router: Router) {
   }
 
   get currentNode() {
-    console.log('getting current node');
     var self = this
     return this.getTree().all(function (node) {
       return node.model.id === self.router.currentRoute.routeId
@@ -115,22 +114,22 @@ constructor(@inject(Router) private router: Router) {
                 }
               ]
             },  
-            // {
-            //   id: 'authorsMapLink',
-            //   type: 'link',
-            //   text: 'Authors Map'
-            // }
+            {
+              id: 'authorsMapLink',
+              type: 'link',
+              text: 'Authors Map'
+            }
           ]
         }
       ]
     })
-
 
     return root
   }
 
   back = () => {
     let currentNode = this.currentNode
+    console.log(currentNode.parent);
     this.router.goToId(currentNode.parent.model.id)
   }
 }

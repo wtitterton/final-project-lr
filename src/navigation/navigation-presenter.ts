@@ -5,7 +5,6 @@ import { RouterRepository } from '../routing'
 
 @injectable()
 export class NavigationPresenter {
-
   get viewModel() {
     const vm = {
       showBack: false,
@@ -15,11 +14,12 @@ export class NavigationPresenter {
     }
 
     let currentNode = this.navigationRepository.currentNode
-
+    
     if (currentNode) {
-      vm.currentSelectedVisibleName = this.visibleName(currentNode)
-      vm.menuItems = currentNode.children.map((node: any) => {
-        return { id: node.model.id, visibleName: node.model.text }
+       vm.currentSelectedVisibleName = this.visibleName(currentNode);
+       console.log(currentNode);
+       vm.menuItems = currentNode.children.map((node: any) => {
+       return node;
       })
 
       if (currentNode.parent) {

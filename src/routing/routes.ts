@@ -14,49 +14,66 @@ export const routes = [
     {
       routeId: 'homeLink',
       routeDef: {
-        path: '/app/home'
+        path: '/app/home',
+        isSecure: false
       }
     },
     {
       routeId: 'booksLink',
       routeDef: {
-        path: '/app/books'
+        path: '/app/books',
+        isSecure: false
       }
     },
     {
       routeId: 'addBooksLink',
       routeDef: {
-        path: '/app/books/add'
+        path: '/app/books/add',
+        isSecure: false
       }
     },
     {
       routeId: 'authorsLink',
       routeDef: {
-        path: '/app/authors'
+        path: '/app/authors',
+        isSecure: false
       }
     },
     {
       routeId: 'addAuthorsLink',
       routeDef: {
-        path: '/app/authors/add'
+        path: '/app/authors/add',
+        isSecure: false
       }
     },
     {
       routeId: 'authorsPolicyLink',
       routeDef: {
-        path: '/app/authors/policy'
+        path: '/app/authors/policy',
+        isSecure: true
       }
     },
     {
       routeId: 'authorsMapLink',
       routeDef: {
-        path: '/app/authors/map'
+        path: '/app/authors/map',
+        isSecure: false
       }
     },
      {
       routeId: 'loginLink',
       routeDef: {
-        path: '/app/authentication/login'
+        path: '/app/authentication/login',
+        isSecure: false
       }
+    },
+     {
+      routeId: 'default',
+      routeDef: {
+        path: '*',
+        isSecure: false
+      },
+      onEnter: () => {}
     }
+    
   ]

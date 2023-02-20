@@ -24,7 +24,6 @@ export class Router {
 
   
   updateCurrentRoute = async (newRouteId: string, params?: string, query?: string) => {
-    console.log(this.currentRoute.routeId);
     let oldRoute = this.routerRepository.findRoute(this.currentRoute.routeId ?? "")
     let newRoute = this.routerRepository.findRoute(newRouteId)
     const hasToken = false; //!!this.userModel.token
