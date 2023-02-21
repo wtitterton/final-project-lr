@@ -9,7 +9,7 @@ import { UserModel } from '../authentication'
 export class Router {
  constructor( 
    @inject(RouterRepository) private routerRepository: RouterRepository,
-  // @inject(UserModel) private userModel: UserModel,
+   @inject(UserModel) private userModel: UserModel,
    @inject(MessagesRepository) private messageRepository: MessagesRepository
   ) {
     makeObservable(this, {
@@ -19,14 +19,13 @@ export class Router {
   }
 
    get currentRoute() {
-        return this.routerRepository.currentRoute
-    }
+      return this.routerRepository.currentRoute
+  }
 
-  
   updateCurrentRoute = async (newRouteId: string, params?: string, query?: string) => {
     let oldRoute = this.routerRepository.findRoute(this.currentRoute.routeId ?? "")
     let newRoute = this.routerRepository.findRoute(newRouteId)
-    const hasToken = false; //!!this.userModel.token
+    const hasToken = !!this.userModel.token
     const routeChanged = oldRoute.routeId !== newRoute.routeId
     const protectedOrUnauthenticatedRoute =
       (newRoute.routeDef.isSecure && hasToken === false) || newRoute.routeDef.path === '*'

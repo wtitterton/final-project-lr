@@ -5,7 +5,7 @@ import { MessagesRepository } from '../core/messages/message-repository'
 import { AuthenticationRepository } from './authentication-repository'
 import { MessagesPresenter } from '../core'
 
-type Option = "login" | "register"
+export type Option = "login" | "register"
 
 @injectable()
 export class LoginRegisterPresenter extends MessagesPresenter {
@@ -16,10 +16,10 @@ export class LoginRegisterPresenter extends MessagesPresenter {
 
   constructor(
     @inject(AuthenticationRepository) private authenticationRepository: AuthenticationRepository,
-    @inject(MessagesRepository) private messagesRepository: MessagesRepository,
+    @inject(MessagesRepository) private _messagesRepository: MessagesRepository,
     @inject(Router) private router: Router
   ) {
-    super(messagesRepository);
+    super(_messagesRepository);
 
     makeObservable(this, {
       email: observable,
@@ -35,7 +35,7 @@ export class LoginRegisterPresenter extends MessagesPresenter {
 
   public login = async (email: string, password: string) => {
      const loginPm = await this.authenticationRepository.login(email, password);
-     //this.unpackRepositoryPmToVm(loginPm, 'User logged in');
+     this.unpackRepositoryPmToVm(loginPm, 'User logged in');
      this.resetValues();
      this.router.goToId('homeLink');
   }
@@ -54,7 +54,7 @@ export class LoginRegisterPresenter extends MessagesPresenter {
 
   setOption(option: Option) {
     runInAction(() => {
-          this.option = option
+          this.option = option;
         })
   }
 }
