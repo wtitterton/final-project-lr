@@ -2,6 +2,7 @@ import { makeObservable, observable } from 'mobx'
 import { inject, injectable } from 'inversify'
 import { RouterGateway } from './router-gateway'
 import {Route, routes} from './routes';
+import { Types } from '../core';
 
 @injectable()
 export class RouterRepository {
@@ -10,7 +11,7 @@ export class RouterRepository {
   private routes: any[] = routes
   
 
-  constructor(@inject(RouterGateway) private routerGateway: RouterGateway) {
+  constructor(@inject(Types.IRouterGateway) private routerGateway: RouterGateway) {
     makeObservable(this, {
       currentRoute: observable
     })
