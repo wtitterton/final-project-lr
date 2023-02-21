@@ -2,7 +2,7 @@ import { useInjection } from 'inversify-react'
 import { observer } from 'mobx-react'
 import { LoginRegisterPresenter } from './login-registration-presenter';
 import { useState } from 'react';
-
+import { Messages } from '../core/messages/messages';
 
 export const LoginRegistrationPage = observer((props: any) => {
     const loginRegisterPresenter = useInjection(LoginRegisterPresenter);
@@ -58,8 +58,9 @@ export const LoginRegistrationPage = observer((props: any) => {
           className="login"
           onSubmit={(event) => {
             event.preventDefault();
-            if (option === 'login') loginRegisterPresenter.login(loginRegisterFormValues)
-            if (option === 'register') loginRegisterPresenter.register(loginRegisterFormValues)
+            const {email, password} = loginRegisterFormValues;
+            if (option === 'login') loginRegisterPresenter.login(email, password)
+            if (option === 'register') loginRegisterPresenter.register(email, password)
           }}
         >
           <label>
@@ -90,6 +91,7 @@ export const LoginRegistrationPage = observer((props: any) => {
         <div className="validation-message"  style={{
           backgroundColor: option === 'login' ? '#E4257D' : '#2E91FC'
         }}>
+          <Messages />
         </div>
       </div>
     </>

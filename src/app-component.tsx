@@ -8,7 +8,7 @@ import { Navigation } from './navigation';
 import { AddBooks, Books } from './books';
 import { AddAuthors, Authors, Map, Policy } from './authors';
 
-export const CurrentPage = observer((props: any) => {
+export const AppComponent = observer((props: any) => {
   const appPresenter = useInjection(AppPresenter);
 
   React.useEffect(() => {

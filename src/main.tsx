@@ -1,9 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App'
 import { Provider } from "inversify-react";
 import {container} from "./app-ioc";
 import { configure } from 'mobx'
+import { ValidationProvider } from './core';
+import {AppComponent} from './app-component';
+import './App.css'
 
 configure({
   enforceActions: 'never',
@@ -17,7 +19,10 @@ configure({
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Provider container={container}>
-      <App />
+       <ValidationProvider>
+          <AppComponent />
+       </ValidationProvider>
+      
     </Provider>
   </React.StrictMode>
 )
