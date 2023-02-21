@@ -1,11 +1,15 @@
 import { useInjection } from 'inversify-react'
 import { observer } from 'mobx-react'
-import { LoginRegisterPresenter } from './login-registration-presenter';
+import { LoginRegisterPresenter, Option } from './login-registration-presenter';
 import { useState } from 'react';
 import { Messages } from '../core/messages/messages';
+import { useValidation, validateInput } from '../core';
+import { registrationSchema } from './registration-validation-schema';
+import { ValidationError } from 'yup';
 
 export const LoginRegistrationPage = observer((props: any) => {
     const loginRegisterPresenter = useInjection(LoginRegisterPresenter);
+    const [clientValidationMessages, updateClientValidationMessages] = useValidation();
   
     const {email, password, option} = loginRegisterPresenter
 
@@ -19,6 +23,25 @@ export const LoginRegistrationPage = observer((props: any) => {
         ...loginRegisterFormValues,
         [event.target.name]: event.target.value
       })
+    }
+
+    const handleFormToggle = (option: Option) => {
+        loginRegisterPresenter.setOption(option);
+        updateClientValidationMessages([]);
+    }
+
+    const handleFormSubmission = (event: React.SyntheticEvent) =>  {
+        event.preventDefault();
+        try {
+          const {email, password} = loginRegisterFormValues;
+          validateInput(registrationSchema, loginRegisterFormValues);
+          if (option === 'login') loginRegisterPresenter.login(email, password)
+          if (option === 'register') loginRegisterPresenter.register(email, password)
+        } catch(error: any) {
+            if(error instanceof ValidationError) {
+              updateClientValidationMessages(error.errors);
+            }
+        }
     }
 
     return (
@@ -36,7 +59,7 @@ export const LoginRegistrationPage = observer((props: any) => {
           type="submit"
           value="login"
           onClick={() => {
-            loginRegisterPresenter.setOption("login")
+           handleFormToggle("login")
           }}
         />
         <input
@@ -44,7 +67,7 @@ export const LoginRegistrationPage = observer((props: any) => {
           type="submit"
           value="register"
           onClick={() => {
-            loginRegisterPresenter.setOption("register")
+            handleFormToggle("register")
           }}
         />
       </div>
@@ -56,12 +79,7 @@ export const LoginRegistrationPage = observer((props: any) => {
       >
         <form
           className="login"
-          onSubmit={(event) => {
-            event.preventDefault();
-            const {email, password} = loginRegisterFormValues;
-            if (option === 'login') loginRegisterPresenter.login(email, password)
-            if (option === 'register') loginRegisterPresenter.register(email, password)
-          }}
+          onSubmit={handleFormSubmission}
         >
           <label>
             <input
