@@ -51,6 +51,12 @@ export class AuthenticationRepository {
       password: password
     })
 
+    if(registerDto.success) {
+      const {email, token} = registerDto.result
+      this.userModel.email = email;
+      this.userModel.token = token;
+    }
+
     return MessagePacking.unpackServerDtoToPm(registerDto)
   }
 
