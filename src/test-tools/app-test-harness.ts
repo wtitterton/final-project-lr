@@ -50,10 +50,10 @@ export class AppTestHarness {
       return Promise.resolve(loginStub())
     })
 
-    this.loginRegisterPresenter = this.container.get(LoginRegisterPresenter)
+    this.loginRegisterPresenter = this.container.get(LoginRegisterPresenter);
     this.loginRegisterPresenter.email = 'a@b.com'
     this.loginRegisterPresenter.password = '123'
-    await this.loginRegisterPresenter.login(this.loginRegisterPresenter.email,  this.loginRegisterPresenter.password)
+    await this.loginRegisterPresenter.login(this.loginRegisterPresenter.email,  this.loginRegisterPresenter.password);
     return this.loginRegisterPresenter
   }
 }

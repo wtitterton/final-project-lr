@@ -1,14 +1,14 @@
 import { NavigationPresenter } from './'
-import { Router } from '../routing'
+import { Router, RouterGateway } from '../routing'
 import { Types } from '../core'
 import { AppTestHarness, GetSuccessfulRegistrationStub } from '../test-tools'
 import { BaseIOC } from '../base-ioc';
 import { Container } from 'inversify';
 
-let appTestHarness: AppTestHarness | null = null;
-let navigationPresenter: NavigationPresenter | null = null;
+let appTestHarness: AppTestHarness;
+let navigationPresenter: NavigationPresenter;
 let router = null;
-let routerGateway = null;
+let routerGateway: RouterGateway;
 
 
 describe('navigation', () => {
@@ -22,22 +22,16 @@ describe('navigation', () => {
 
   describe('before login', () => {
     it('anchor default state', () => {
-      expect(true).toBeTruthy()
       expect(navigationPresenter).toBeInstanceOf(NavigationPresenter);
-      if(navigationPresenter !== null) {
-        expect(navigationPresenter.viewModel.currentSelectedVisibleName).toBe('')
-        expect(navigationPresenter.viewModel.showBack).toBe(false)
-        expect(navigationPresenter.viewModel.menuItems).toEqual([])
-      }
+      expect(navigationPresenter.viewModel.currentSelectedVisibleName).toBe('')
+      expect(navigationPresenter.viewModel.showBack).toBe(false)
+      expect(navigationPresenter.viewModel.menuItems).toEqual([])
     })
   })
 
   describe('login', () => {
     beforeEach(async () => {
-      expect(appTestHarness).toBeInstanceOf(AppTestHarness);
-      if(appTestHarness !== null) {
-         await appTestHarness.setupLogin(GetSuccessfulRegistrationStub, 'login')
-      }
+      await appTestHarness.setupLogin(GetSuccessfulRegistrationStub, 'login')
     })
   })
 })
