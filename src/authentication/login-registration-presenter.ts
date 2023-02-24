@@ -42,7 +42,6 @@ export class LoginRegisterPresenter extends MessagesPresenter {
 
    register = async (email: string, password: string) => {
      const registerPm = await this.authenticationRepository.register(email, password);
-     console.log(registerPm);
      this.unpackRepositoryPmToVm(registerPm, 'User registered');
   }
 
