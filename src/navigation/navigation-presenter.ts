@@ -1,10 +1,17 @@
 import { inject, injectable } from 'inversify'
 import { computed, makeObservable } from 'mobx'
 import { NavigationRepository } from './navigation-repository'
-import { RouterRepository } from '../routing'
 
 @injectable()
 export class NavigationPresenter {
+   constructor(  
+    @inject(NavigationRepository) private navigationRepository: NavigationRepository
+  ) {
+    makeObservable(this, {
+      viewModel: computed
+    })
+  }
+  
   get viewModel() {
     const vm = {
       showBack: false,
@@ -36,14 +43,7 @@ export class NavigationPresenter {
     return vm
   }
 
-  constructor(  
-    @inject(NavigationRepository) private navigationRepository: NavigationRepository,
-    @inject(RouterRepository) routerRepository: RouterRepository
-  ) {
-    makeObservable(this, {
-      viewModel: computed
-    })
-  }
+ 
 
   visibleName = (node: any) => {
     return node.model.text + ' > ' + node.model.id

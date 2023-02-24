@@ -2,13 +2,12 @@ import { injectable, inject } from 'inversify'
 import TreeModel from 'tree-model'
 import { Router } from '../routing'
 import { makeObservable, computed, action } from 'mobx'
+import {Types} from '../core';
 
 @injectable()
 export class NavigationRepository {
-//   @inject(AuthenticationRepository)
-//   authenticationRepository
 
-constructor(@inject(Router) private router: Router) {
+constructor(@inject(Types.IRouter) private router: Router) {
     makeObservable(this, {
       currentNode: computed,
       back: action

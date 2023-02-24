@@ -33,6 +33,7 @@ export const LoginRegistrationPage = observer((props: any) => {
     const handleFormSubmission = (event: React.SyntheticEvent) =>  {
         event.preventDefault();
         try {
+          updateClientValidationMessages([]);
           const {email, password} = loginRegisterFormValues;
           validateInput(registrationSchema, loginRegisterFormValues);
           if (option === 'login') loginRegisterPresenter.login(email, password)

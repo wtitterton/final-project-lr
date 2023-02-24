@@ -1,8 +1,6 @@
-
-import 'reflect-metadata'
 import { Router } from './routing'
 import { makeObservable, computed } from 'mobx'
-import { MessagesRepository } from './core'
+import { MessagesRepository, Types } from './core'
 import { inject, injectable } from 'inversify'
 
 
@@ -10,7 +8,7 @@ import { inject, injectable } from 'inversify'
 export class AppPresenter {
   constructor( 
     @inject(MessagesRepository) private messagesRepository: MessagesRepository,
-    @inject(Router) private router: Router
+    @inject(Types.IRouter) private router: Router
   ) {
     makeObservable(this, {
       currentRoute: computed
