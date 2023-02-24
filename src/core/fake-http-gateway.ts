@@ -1,4 +1,5 @@
-import { injectable, inject } from 'inversify'
+
+import { injectable } from 'inversify'
 
 @injectable()
 export class FakeHttpGateway {

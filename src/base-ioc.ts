@@ -1,9 +1,8 @@
 import { Container } from 'inversify'
-import { MessagesRepository } from './core'
-import { RouterRepository } from './routing'
+import { MessagesRepository, Types } from './core'
+import { Router, RouterRepository } from './routing'
 import { NavigationRepository } from './navigation'
 import { UserModel } from './authentication';
-//import { UserModel } from './authentication'
 
 export class BaseIOC {
   container;
@@ -16,7 +15,7 @@ export class BaseIOC {
   }
 
   buildBaseTemplate = () => {
-  
+    this.container.bind<Router>(Types.IRouter).to(Router).inSingletonScope()
     this.container.bind<MessagesRepository>(MessagesRepository).to(MessagesRepository).inSingletonScope()
     this.container.bind<RouterRepository>(RouterRepository).to(RouterRepository).inSingletonScope()
     this.container.bind<NavigationRepository>(NavigationRepository).to(NavigationRepository).inSingletonScope()

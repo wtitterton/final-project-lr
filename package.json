@@ -6,10 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "jest"
   },
   "dependencies": {
     "@types/navigo": "^8.1.2",
+    "babel-jest": "^29.4.3",
     "inversify": "^6.0.1",
     "inversify-react": "^1.0.2",
     "mobx": "^6.7.0",

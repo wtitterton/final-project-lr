@@ -6,7 +6,7 @@ import { Types } from '../core';
 
 @injectable()
 export class RouterRepository {
-  currentRoute: Route = { routeId: "loginLink", routeDef: {path: null, isSecure: true} }
+  currentRoute: Route = { routeId: null, routeDef: {path: null, isSecure: true} }
   onRouteChanged = () => {}
   private routes: any[] = routes
   
