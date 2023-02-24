@@ -15,35 +15,35 @@ export const routes = [
       routeId: 'homeLink',
       routeDef: {
         path: '/app/home',
-        isSecure: false
+        isSecure: true
       }
     },
     {
       routeId: 'booksLink',
       routeDef: {
         path: '/app/books',
-        isSecure: false
+        isSecure: true
       }
     },
     {
       routeId: 'addBooksLink',
       routeDef: {
         path: '/app/books/add',
-        isSecure: false
+        isSecure: true
       }
     },
     {
       routeId: 'authorsLink',
       routeDef: {
         path: '/app/authors',
-        isSecure: false
+        isSecure: true
       }
     },
     {
       routeId: 'addAuthorsLink',
       routeDef: {
         path: '/app/authors/add',
-        isSecure: false
+       isSecure: true
       }
     },
     {
@@ -57,7 +57,7 @@ export const routes = [
       routeId: 'authorsMapLink',
       routeDef: {
         path: '/app/authors/map',
-        isSecure: false
+        isSecure: true
       }
     },
      {
