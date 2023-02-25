@@ -1,11 +1,10 @@
-
-import { injectable } from 'inversify'
+import { injectable } from "inversify";
 
 @injectable()
 export class FakeHttpGateway {
-  get = async (path: string) => {}
+  get = async (path: string) => {};
 
-  post = async (path: string, requestDto: any) => {}
+  post = async (path: string, requestDto: any) => {};
 
-  delete = async (path: string) => {}
+  delete = async (path: string) => {};
 }

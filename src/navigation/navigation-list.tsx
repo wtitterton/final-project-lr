@@ -1,15 +1,15 @@
-import * as React from 'react'
-import { observer } from 'mobx-react'
-import { useInjection } from 'inversify-react'
-import { Router } from '../routing'
-export const NavigationList = observer(({node}: any) => {
-    const router = useInjection(Router);
+import * as React from "react";
+import { observer } from "mobx-react";
+import { useInjection } from "inversify-react";
+import { Router } from "../routing";
+export const NavigationList = observer(({ node }: any) => {
+  const router = useInjection(Router);
 
   return (
     <>
       <div
         className="navigation-item"
-        style={{ backgroundColor: '#2e91fc' }}
+        style={{ backgroundColor: "#2e91fc" }}
         onClick={() => router.goToId(node.model.id)}
       >
         {node.model.text}
@@ -18,16 +18,16 @@ export const NavigationList = observer(({node}: any) => {
         <div
           className="navigation-item"
           style={{
-            backgroundColor: '#E4257D'
+            backgroundColor: "#E4257D",
           }}
           key={i}
           onClick={() => {
-            router.goToId(node.model.id)
+            router.goToId(node.model.id);
           }}
         >
           {node.model.text}
         </div>
       ))}
     </>
-  )
-})
+  );
+});
