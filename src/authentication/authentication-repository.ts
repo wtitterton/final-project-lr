@@ -1,8 +1,6 @@
 import { injectable, inject } from "inversify";
 import { makeObservable, action } from "mobx";
 import { IMessagePacking, MessagePacking, Types } from "../core";
-
-import { Router } from "../routing";
 import { UserModel } from "./";
 import { HttpGateway } from "../core/http-gateway";
 
@@ -24,8 +22,7 @@ interface LoginRegisterResponse {
 export class AuthenticationRepository {
   constructor(
     @inject(Types.IDataGateway) private dataGateway: HttpGateway,
-    @inject(UserModel) private userModel: UserModel,
-    @inject(Types.IRouter) private router: Router
+    @inject(UserModel) private userModel: UserModel
   ) {
     makeObservable(this, {
       login: action,
