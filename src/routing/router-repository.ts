@@ -1,25 +1,70 @@
 import { makeObservable, observable } from "mobx";
 import { inject, injectable } from "inversify";
 import { RouterGateway } from "./router-gateway";
-import { Route, routes } from "./routes";
+import { Route } from "./routes";
 import { Types } from "../core";
+import { BooksRepository } from "../books";
 
 @injectable()
 export class RouterRepository {
-  currentRoute: Route = {
-    routeId: null,
-    routeDef: { path: null, isSecure: true },
-  };
-  onRouteChanged = () => {};
-  private routes: any[] = routes;
-
   constructor(
+    @inject(BooksRepository) private booksRepository: BooksRepository,
     @inject(Types.IRouterGateway) private routerGateway: RouterGateway
   ) {
     makeObservable(this, {
       currentRoute: observable,
     });
   }
+
+  currentRoute: Route = {
+    routeId: null,
+    routeDef: { path: null, isSecure: true },
+  };
+  onRouteChanged = () => {};
+  private routes: any[] = [
+    {
+      routeId: "homeLink",
+      routeDef: {
+        path: "/app/home",
+        isSecure: true,
+      },
+    },
+    {
+      routeId: "booksLink",
+      routeDef: {
+        path: "/app/books",
+        isSecure: true,
+      },
+      onEnter: () => {
+        this.booksRepository.load();
+      },
+      onLeave: () => {
+        this.booksRepository.reset();
+      },
+    },
+    {
+      routeId: "authorsLink",
+      routeDef: {
+        path: "/app/authors",
+        isSecure: true,
+      },
+    },
+    {
+      routeId: "loginLink",
+      routeDef: {
+        path: "/app/authentication/login",
+        isSecure: false,
+      },
+    },
+    {
+      routeId: "default",
+      routeDef: {
+        path: "*",
+        isSecure: false,
+      },
+      onEnter: () => {},
+    },
+  ];
 
   registerRoutes = (updateCurrentRoute: any, onRouteChanged: any) => {
     this.onRouteChanged = onRouteChanged;
