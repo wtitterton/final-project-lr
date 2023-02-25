@@ -7,7 +7,6 @@
     "build": "tsc && vite build",
     "dev": "vite",
     "lint": "npm-run-all lint:prettier",
-    "lint:eslint": "node --max_old_space_size=8192 node_modules/.bin/eslint --cache --cache-location node_modules/.cache/.eslintcache --fix --max-warnings 0 .",
     "lint:prettier": "prettier --loglevel warn --write .",
     "preview": "vite preview",
     "test": "jest"
