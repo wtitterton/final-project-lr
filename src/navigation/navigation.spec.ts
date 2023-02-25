@@ -28,10 +28,4 @@ describe('navigation', () => {
       expect(navigationPresenter.viewModel.menuItems).toEqual([])
     })
   })
-
-  describe('login', () => {
-    beforeEach(async () => {
-      await appTestHarness.setupLogin(GetSuccessfulRegistrationStub, 'login')
-    })
-  })
 })
