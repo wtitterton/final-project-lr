@@ -43,8 +43,7 @@ describe("routing", () => {
         
         // pivot ensure user is logged in
         const loginPresenter = await appTestHarness.setupLogin(GetSuccessfulUserLoginStub, '');
-        console.log(loginPresenter);
-
+    
         router.goToId('homeLink');
         expect(routerGateway.goToId).toHaveBeenLastCalledWith('homeLink')
     })
