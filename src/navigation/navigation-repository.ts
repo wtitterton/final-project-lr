@@ -29,95 +29,14 @@ export class NavigationRepository {
       text: "Home",
       children: [
         {
-          id: "booksExpand",
-          type: "expand",
+          id: "booksLink",
+          type: "link",
           text: "Books",
-          children: [
-            {
-              id: "booksLink",
-              type: "link",
-              text: "Books",
-              children: [
-                {
-                  id: "addBooksLink",
-                  type: "link",
-                  text: "Add Book",
-                  children: [
-                    {
-                      id: "booksLink",
-                      type: "link",
-                      text: "Books",
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              id: "addBooksLink",
-              type: "link",
-              text: "Add Book",
-            },
-          ],
         },
         {
-          id: "authorsExpand",
-          type: "expand",
+          id: "authorsLink",
+          type: "link",
           text: "Authors",
-          children: [
-            {
-              id: "authorsLink",
-              type: "link",
-              text: "Authors",
-              children: [
-                {
-                  id: "addAuthorsLink",
-                  type: "link",
-                  text: "Add Author",
-                  children: [
-                    {
-                      id: "authorsLink",
-                      type: "link",
-                      text: "Authors",
-                    },
-                  ],
-                },
-                {
-                  id: "authorsPolicyLink",
-                  type: "link",
-                  text: "Author Policy",
-                  children: [],
-                },
-                {
-                  id: "authorsMapLink",
-                  type: "link",
-                  text: "View Map",
-                  children: [],
-                },
-              ],
-            },
-            {
-              id: "addAuthorsLink",
-              type: "link",
-              text: "Add Author",
-              children: [
-                {
-                  id: "authorsMapLink",
-                  type: "link",
-                  text: "View Map",
-                },
-                {
-                  id: "authorsPolicyLink",
-                  type: "link",
-                  text: "Author Policy",
-                },
-              ],
-            },
-            {
-              id: "authorsMapLink",
-              type: "link",
-              text: "Authors Map",
-            },
-          ],
         },
       ],
     });
@@ -127,9 +46,9 @@ export class NavigationRepository {
 
   back = () => {
     let currentNode = this.currentNode;
-    if (currentNode.hasChildren()) {
-      this.router.goToId(currentNode.parent.parent.model.id);
-    }
+    // if (currentNode.hasChildren()) {
+    //   this.router.goToId(currentNode.parent.parent.model.id);
+    // }
 
     this.router.goToId(currentNode.parent.model.id);
   };
