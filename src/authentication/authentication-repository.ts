@@ -1,8 +1,6 @@
 import { injectable, inject } from "inversify";
 import { makeObservable, action } from "mobx";
 import { IMessagePacking, MessagePacking, Types } from "../core";
-
-import { Router } from "../routing";
 import { UserModel } from "./";
 import { HttpGateway } from "../core/http-gateway";
 
@@ -69,8 +67,8 @@ export class AuthenticationRepository {
     return MessagePacking.unpackServerDtoToPm(registerDto);
   };
 
-  logOut = async () => {
-    this.userModel.email = "";
-    this.userModel.token = "";
+  logOut = () => {
+    this.userModel.email = null;
+    this.userModel.token = null;
   };
 }

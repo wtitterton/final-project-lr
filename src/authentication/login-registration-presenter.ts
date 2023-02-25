@@ -53,6 +53,11 @@ export class LoginRegisterPresenter extends MessagesPresenter {
     this.unpackRepositoryPmToVm(registerPm, "User registered");
   };
 
+  logout = async () => {
+    this.authenticationRepository.logOut();
+    this.router.goToId("loginLink");
+  };
+
   resetValues() {
     this.email = "";
     this.password = "";
