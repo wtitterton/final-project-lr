@@ -24,7 +24,8 @@ interface LoginRegisterResponse {
 export class AuthenticationRepository {
   constructor(
     @inject(Types.IDataGateway) private dataGateway: HttpGateway,
-    @inject(UserModel) private userModel: UserModel
+    @inject(UserModel) private userModel: UserModel,
+    @inject(Types.IRouter) private router: Router
   ) {
     makeObservable(this, {
       login: action,
@@ -69,8 +70,8 @@ export class AuthenticationRepository {
     return MessagePacking.unpackServerDtoToPm(registerDto);
   };
 
-  logOut = async () => {
-    this.userModel.email = "";
-    this.userModel.token = "";
+  logOut = () => {
+    this.userModel.email = null;
+    this.userModel.token = null;
   };
 }

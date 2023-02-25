@@ -43,8 +43,7 @@ describe("routing", () => {
 
     // pivot ensure user is logged in
     const loginPresenter = await appTestHarness.setupLogin(
-      GetSuccessfulUserLoginStub,
-      ""
+      GetSuccessfulUserLoginStub
     );
 
     router.goToId("homeLink");

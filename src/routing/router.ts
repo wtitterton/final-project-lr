@@ -61,7 +61,7 @@ export class Router {
     );
   };
 
-  goToId = async (routeId: string, params?: string, query?: string) => {
+  goToId = (routeId: string, params?: string, query?: string) => {
     this.routerRepository.goToId(routeId);
   };
 }
