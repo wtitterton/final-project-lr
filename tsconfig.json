@@ -17,7 +17,6 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx"
-    
   },
   "include": ["src", "jest.config.ts", "tsconfig.jest.json"],
   "references": [{ "path": "./tsconfig.node.json" }],

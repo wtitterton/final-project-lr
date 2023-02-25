@@ -1,18 +1,18 @@
-import { injectable, inject } from 'inversify'
-import { makeObservable, observable } from 'mobx'
+import { injectable, inject } from "inversify";
+import { makeObservable, observable } from "mobx";
 
 @injectable()
 export class MessagesRepository {
-  appMessages: string[] = []
+  appMessages: string[] = [];
 
   constructor() {
     makeObservable(this, {
-      appMessages: observable
-    })
-    this.reset()
+      appMessages: observable,
+    });
+    this.reset();
   }
 
   reset = () => {
-    this.appMessages = []
-  }
+    this.appMessages = [];
+  };
 }
