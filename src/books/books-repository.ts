@@ -62,8 +62,6 @@ export class BooksRepository {
       this.load();
     }
 
-    console.log(addBookDto);
-
     return MessagePacking.unpackServerDtoToPm(addBookDto);
   };
 

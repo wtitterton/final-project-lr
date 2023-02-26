@@ -33,7 +33,7 @@ export class BooksPresenter
     this.init();
     const addBookPm = await this.booksRepository.addBook(book);
 
-    this.unpackRepositoryPmToVm(addBookPm, "book added");
+    this.unpackRepositoryPmToVm(addBookPm, "Book Added");
   };
 
   reset = () => {
