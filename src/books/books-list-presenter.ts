@@ -8,11 +8,11 @@ export class BooksListPresenter {
     @inject(BooksRepository) private booksRepository: BooksRepository
   ) {
     makeObservable(this, {
-      viewModel: computed,
+      books: computed,
     });
   }
 
-  get viewModel() {
+  get books() {
     return this.booksRepository.booksPm.map((book: any) => ({
       id: book.id,
       visibleName: book.name,

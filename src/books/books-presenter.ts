@@ -1,5 +1,5 @@
 import { injectable, inject } from "inversify";
-import { makeObservable, computed } from "mobx";
+import { makeObservable, computed, runInAction } from "mobx";
 import { BookDto, BooksRepository } from "./books-repository";
 import { MessagesPresenter, MessagesRepository } from "../core";
 
@@ -12,21 +12,24 @@ export class BooksPresenter
   extends MessagesPresenter
   implements AddBooksPresenter
 {
-  public newBookName: string | null = null;
-
   constructor(
     @inject(BooksRepository) private booksRepository: BooksRepository,
     @inject(MessagesRepository) private _messagesRepository: MessagesRepository
   ) {
     super(_messagesRepository);
     makeObservable(this, {
-      viewModel: computed,
+      lastAddedBookName: computed,
     });
   }
 
-  get viewModel() {
-    this.newBookName = this.booksRepository.lastAddedBookName;
-    return this.newBookName;
+  get lastAddedBookName() {
+    // vm
+    const lastAddedBookVm = this.booksRepository.lastAddedBookName;
+    return lastAddedBookVm;
+  }
+
+  set lastAddedBookName(newLastAddedBookName) {
+    this.lastAddedBookName = newLastAddedBookName;
   }
 
   addBook = async (book: BookDto): Promise<void> => {
@@ -37,6 +40,6 @@ export class BooksPresenter
   };
 
   reset = () => {
-    this.newBookName = "";
+    this.lastAddedBookName = "";
   };
 }

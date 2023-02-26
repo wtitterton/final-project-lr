@@ -32,16 +32,14 @@ describe("Loading books", () => {
   });
 
   it("Should show books list", async () => {
-    const booksListPresenter = await appTestHarness.setupGetAllBooks(
+    const { books } = await appTestHarness.setupGetAllBooks(
       SingleBooksResultStub
     );
 
-    expect(booksListPresenter.viewModel.length).toBe(4);
+    expect(books.length).toBe(4);
     // Spot check
-    expect(booksListPresenter.viewModel[1].visibleName).toBe("I, Robot");
-    expect(booksListPresenter.viewModel[3].visibleName).toBe(
-      "Wind In The Willows 2"
-    );
+    expect(books[1].visibleName).toBe("I, Robot");
+    expect(books[3].visibleName).toBe("Wind In The Willows 2");
   });
 });
 
@@ -64,15 +62,15 @@ describe("Adding books", () => {
       SingleBooksResultStub
     );
 
-    expect(booksListPresenter.viewModel.length).toBe(4);
+    expect(booksListPresenter.books.length).toBe(4);
 
     // pivot and add a book
     const newBook = { name: NEW_BOOK_NAME, emailOwnerId: EMAIL_OWNER_ID };
     await appTestHarness.setupAddBooks(newBook, 20);
 
     expect(bookRepositoryLoadSpy).toBeCalled();
-    expect(booksListPresenter.viewModel.length).toBe(5);
-    expect(booksListPresenter.viewModel[4].visibleName).toBe(NEW_BOOK_NAME);
+    expect(booksListPresenter.books.length).toBe(5);
+    expect(booksListPresenter.books[4].visibleName).toBe(NEW_BOOK_NAME);
   });
 
   it("Should make the correct api calls when adding a book", async () => {
@@ -102,6 +100,6 @@ describe("Adding books", () => {
     const newBook = { name: NEW_BOOK_NAME, emailOwnerId: EMAIL_OWNER_ID };
     await appTestHarness.setupAddBooks(newBook, 20);
 
-    expect(booksPresenter.viewModel).toBe(NEW_BOOK_NAME);
+    expect(booksPresenter.lastAddedBookName).toBe(NEW_BOOK_NAME);
   });
 });
