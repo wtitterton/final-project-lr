@@ -6,9 +6,9 @@ import { UserModel } from "../authentication";
 export class HttpGateway {
   constructor(@inject(UserModel) private userModel: UserModel) {}
 
-  get = async <R>(path: string): Promise<R> => {
+  get = async <R>(path: string, params?: string): Promise<R> => {
     const response = await fetch(
-      `https://api.logicroom.co/secure-api/wftitterton@gmail.com${path}`,
+      `https://api.logicroom.co/secure-api/wftitterton@gmail.com${path}${params}`,
       {
         method: "GET",
         headers: {

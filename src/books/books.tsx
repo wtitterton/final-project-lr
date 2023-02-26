@@ -1,5 +1,9 @@
 import { useInjection } from "inversify-react";
 import { observer } from "mobx-react";
+import { Messages } from "../core/messages/messages";
+import { BookList } from "./books-list";
+import { LastAddedBook } from "./last-added-book";
+import { AddBooks } from "./add-books";
 import { BooksPresenter } from "./books-presenter";
 
 export const Books = observer(() => {
@@ -7,7 +11,11 @@ export const Books = observer(() => {
   return (
     <>
       <h1>Books</h1>
-      {booksPresenter.viewModel}
+      <LastAddedBook />
+      <BookList />
+      <AddBooks presenter={booksPresenter} />
+      <br />
+      <Messages />
     </>
   );
 });

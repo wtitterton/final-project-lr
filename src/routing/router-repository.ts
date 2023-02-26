@@ -35,10 +35,11 @@ export class RouterRepository {
         path: "/app/books",
         isSecure: true,
       },
-      onEnter: () => {
-        this.booksRepository.load();
+      onEnter: async () => {
+        await this.booksRepository.load();
       },
       onLeave: () => {
+        console.log("leaving");
         this.booksRepository.reset();
       },
     },
