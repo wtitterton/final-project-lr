@@ -10,14 +10,34 @@ import {
 import { UserModel } from "../authentication";
 
 export interface BookDto {
+  bookId?: number;
   name: string;
   emailOwnerId: string;
+  devOwnerId?: string;
+}
+
+export interface BooksPm {
+  id: number;
+  name: string;
+}
+
+export interface GetBooksResponse {
+  success: boolean;
+  result: BookDto[];
+}
+
+interface addBookResponse {
+  success: boolean;
+  result: {
+    bookId: number;
+    message: string;
+  };
 }
 
 @injectable()
 export class BooksRepository {
   public messagePm: string = "UNSET";
-  public booksPm: any[] = [];
+  public booksPm: BooksPm[] = [];
   public lastAddedBookName: string | null = null;
 
   constructor(
@@ -37,22 +57,25 @@ export class BooksRepository {
     this.messagePm = "";
   };
 
-  getBooks = async () => {
-    const booksDto: any = await this.httpGateway.get(
+  getBooks = async (): Promise<BooksPm[]> => {
+    const booksDto = await this.httpGateway.get<GetBooksResponse>(
       "/books",
       `?emailOwnerId=${this.userModel.email}`
     );
 
-    const booksPm = booksDto.result.map((book: any) => ({
-      id: book.bookId,
-      name: book.name,
-    }));
-
-    return booksPm;
+    return booksDto.result.map((book: BookDto): BooksPm => {
+      if (book.bookId === undefined) {
+        throw Error("found a book with no id");
+      }
+      return {
+        id: book.bookId,
+        name: book.name,
+      };
+    });
   };
 
   addBook = async (bookDto: BookDto): Promise<IMessagePacking> => {
-    const addBookDto = await this.httpGateway.post<BookDto, any>(
+    const addBookDto = await this.httpGateway.post<BookDto, addBookResponse>(
       "/books",
       bookDto
     );

@@ -4,7 +4,7 @@ import { FakeRouterGateway, Router, RouterRepository } from "../routing";
 import { LoginRegisterPresenter } from "../authentication";
 import { AppPresenter } from "../app-presenter";
 import { Container } from "inversify";
-import { BookDto, BooksRepository } from "../books";
+import { BookDto, BooksRepository, GetBooksResponse } from "../books";
 import { BooksListPresenter } from "../books/books-list-presenter";
 import { SingleBooksResultStub } from "./single-books-result-stub";
 import { GetSuccessfulBookAddedStub } from "./get-successful-book-added-stub";
@@ -89,7 +89,7 @@ export class AppTestHarness {
   };
 
   setupGetAllBooks = async (
-    getBooksStub: () => any
+    getBooksStub: () => GetBooksResponse
   ): Promise<BooksListPresenter> => {
     this.httpGateway = this.container.get(Types.IDataGateway);
     this.httpGateway.get = jest.fn().mockResolvedValue(getBooksStub());
@@ -107,7 +107,7 @@ export class AppTestHarness {
 
     const getBooksReponse = SingleBooksResultStub();
     const addedBook = {
-      id: bookAddedResponse.result.bookId,
+      bookId: bookAddedResponse.result.bookId,
       name: book.name,
       emailOwnerId: book.emailOwnerId,
       devOwnerId: "pete@logicroom.co",

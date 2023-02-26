@@ -1,5 +1,5 @@
 import { injectable, inject } from "inversify";
-import { makeObservable, computed, runInAction } from "mobx";
+import { makeObservable, computed } from "mobx";
 import { BookDto, BooksRepository } from "./books-repository";
 import { MessagesPresenter, MessagesRepository } from "../core";
 
