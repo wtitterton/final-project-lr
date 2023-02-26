@@ -94,4 +94,14 @@ describe("Adding books", () => {
 
     expect(booksPresenter.messages).toEqual(["Book Added"]);
   });
+
+  it("should show name of most recently added book", async () => {
+    const NEW_BOOK_NAME = "New Book";
+    const EMAIL_OWNER_ID = "email@email.com";
+
+    const newBook = { name: NEW_BOOK_NAME, emailOwnerId: EMAIL_OWNER_ID };
+    await appTestHarness.setupAddBooks(newBook, 20);
+
+    expect(booksPresenter.viewModel).toBe(NEW_BOOK_NAME);
+  });
 });
