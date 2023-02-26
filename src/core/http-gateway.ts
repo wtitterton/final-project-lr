@@ -14,7 +14,7 @@ export class HttpGateway {
         headers: {
           "Content-Type": "application/json",
           Authorization: this.userModel.token,
-        }
+        },
       }
     );
     const dto = response.json();

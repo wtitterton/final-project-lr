@@ -4,7 +4,6 @@ import { BooksRepository } from "./books-repository";
 
 @injectable()
 export class BooksListPresenter {
-
   constructor(
     @inject(BooksRepository) private booksRepository: BooksRepository
   ) {
@@ -14,7 +13,9 @@ export class BooksListPresenter {
   }
 
   get viewModel() {
-    return  this.booksRepository.booksPm.map((book: any) => ({id: book.id, visibleName: book.name}))
+    return this.booksRepository.booksPm.map((book: any) => ({
+      id: book.id,
+      visibleName: book.name,
+    }));
   }
-
 }
