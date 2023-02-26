@@ -6,10 +6,10 @@ import { useInjection } from "inversify-react";
 
 export const BookList = observer(() => {
   const bookListPresenter = useInjection(BooksListPresenter);
-  console.log(bookListPresenter.viewModel);
+  const { books } = bookListPresenter;
   return (
     <>
-      {bookListPresenter.viewModel.map((book, i) => {
+      {books.map((book, i) => {
         return <div key={book.id}>{book.visibleName}</div>;
       })}
       <br />

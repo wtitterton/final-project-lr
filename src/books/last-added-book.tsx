@@ -4,10 +4,10 @@ import { useInjection } from "inversify-react";
 import { BooksPresenter } from "./books-presenter";
 
 export const LastAddedBook = observer(() => {
-  const booksPresenter = useInjection(BooksPresenter);
+  const { lastAddedBookName } = useInjection(BooksPresenter);
   return (
     <>
-      <p>Last Added Book : {booksPresenter.viewModel}</p>
+      <p>Last Added Book : {lastAddedBookName}</p>
     </>
   );
 });

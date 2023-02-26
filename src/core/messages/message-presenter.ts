@@ -5,7 +5,7 @@ import { IMessagePacking } from "./message-packing";
 
 @injectable()
 export class MessagesPresenter {
-  public showValidationWarning = false;
+  public showValidationWarning: boolean = false;
 
   get messages() {
     return this.messagesRepository.appMessages;

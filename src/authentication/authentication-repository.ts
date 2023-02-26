@@ -4,7 +4,7 @@ import { IMessagePacking, MessagePacking, Types } from "../core";
 import { UserModel } from "./";
 import { HttpGateway } from "../core/http-gateway";
 
-interface LoginRegisterDto {
+export interface LoginRegisterDto {
   email: string;
   password: string;
 }
@@ -29,14 +29,14 @@ export class AuthenticationRepository {
     });
   }
 
-  login = async (email: string, password: string): Promise<IMessagePacking> => {
+  login = async (
+    loginRegisterDto: LoginRegisterDto
+  ): Promise<IMessagePacking> => {
+    const { email } = loginRegisterDto;
     const loginDto = await this.dataGateway.post<
       LoginRegisterDto,
       LoginRegisterResponse
-    >("/login", {
-      email: email,
-      password: password,
-    });
+    >("/login", loginRegisterDto);
 
     if (loginDto.success) {
       this.userModel.email = email;
@@ -47,16 +47,12 @@ export class AuthenticationRepository {
   };
 
   register = async (
-    email: string,
-    password: string
+    loginRegisterDto: LoginRegisterDto
   ): Promise<IMessagePacking> => {
     const registerDto = await this.dataGateway.post<
       LoginRegisterDto,
       LoginRegisterResponse
-    >("/register", {
-      email: email,
-      password: password,
-    });
+    >("/register", loginRegisterDto);
 
     if (registerDto.success) {
       const { email, token } = registerDto.result;
