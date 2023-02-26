@@ -36,8 +36,9 @@ export const LoginRegistrationPage = observer((props: any) => {
     try {
       updateClientValidationMessages([]);
       validateInput(registrationSchema, loginRegisterFormValues);
-      
-      if (option === "login") loginRegisterPresenter.login(loginRegisterFormValues);
+
+      if (option === "login")
+        loginRegisterPresenter.login(loginRegisterFormValues);
       if (option === "register")
         loginRegisterPresenter.register(loginRegisterFormValues);
     } catch (error: any) {

@@ -29,7 +29,9 @@ export class AuthenticationRepository {
     });
   }
 
-  login = async (loginRegisterDto: LoginRegisterDto): Promise<IMessagePacking> => {
+  login = async (
+    loginRegisterDto: LoginRegisterDto
+  ): Promise<IMessagePacking> => {
     const { email } = loginRegisterDto;
     const loginDto = await this.dataGateway.post<
       LoginRegisterDto,

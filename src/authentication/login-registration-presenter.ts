@@ -2,7 +2,10 @@ import { injectable, inject } from "inversify";
 import { Router } from "../routing";
 import { action, makeObservable, observable, runInAction } from "mobx";
 import { MessagesRepository } from "../core/messages/message-repository";
-import { AuthenticationRepository, LoginRegisterDto } from "./authentication-repository";
+import {
+  AuthenticationRepository,
+  LoginRegisterDto,
+} from "./authentication-repository";
 import { MessagesPresenter, Types } from "../core";
 
 export type Option = "login" | "register";
@@ -46,7 +49,9 @@ export class LoginRegisterPresenter extends MessagesPresenter {
 
   register = async (registerDto: LoginRegisterDto) => {
     this.init();
-    const registerPm = await this.authenticationRepository.register(registerDto);
+    const registerPm = await this.authenticationRepository.register(
+      registerDto
+    );
     this.unpackRepositoryPmToVm(registerPm, "User registered");
   };
 

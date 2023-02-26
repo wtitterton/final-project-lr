@@ -66,7 +66,7 @@ export class AppTestHarness {
 
     await this.loginRegisterPresenter.login({
       email: this.loginRegisterPresenter.email,
-      password: this.loginRegisterPresenter.password
+      password: this.loginRegisterPresenter.password,
     });
 
     return this.loginRegisterPresenter;
@@ -83,7 +83,7 @@ export class AppTestHarness {
       return Promise.resolve(registrationStub());
     });
 
-    await this.loginRegisterPresenter.register({email, password});
+    await this.loginRegisterPresenter.register({ email, password });
 
     return this.loginRegisterPresenter;
   };
