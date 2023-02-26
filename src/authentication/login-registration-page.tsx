@@ -35,11 +35,11 @@ export const LoginRegistrationPage = observer((props: any) => {
     event.preventDefault();
     try {
       updateClientValidationMessages([]);
-      const { email, password } = loginRegisterFormValues;
       validateInput(registrationSchema, loginRegisterFormValues);
-      if (option === "login") loginRegisterPresenter.login(email, password);
+      
+      if (option === "login") loginRegisterPresenter.login(loginRegisterFormValues);
       if (option === "register")
-        loginRegisterPresenter.register(email, password);
+        loginRegisterPresenter.register(loginRegisterFormValues);
     } catch (error: any) {
       if (error instanceof ValidationError) {
         updateClientValidationMessages(error.errors);

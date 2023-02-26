@@ -2,7 +2,7 @@ import { injectable, inject } from "inversify";
 import { Router } from "../routing";
 import { action, makeObservable, observable, runInAction } from "mobx";
 import { MessagesRepository } from "../core/messages/message-repository";
-import { AuthenticationRepository } from "./authentication-repository";
+import { AuthenticationRepository, LoginRegisterDto } from "./authentication-repository";
 import { MessagesPresenter, Types } from "../core";
 
 export type Option = "login" | "register";
@@ -33,9 +33,9 @@ export class LoginRegisterPresenter extends MessagesPresenter {
     this.init();
   }
 
-  public login = async (email: string, password: string) => {
+  public login = async (loginDto: LoginRegisterDto) => {
     this.init();
-    const loginPm = await this.authenticationRepository.login(email, password);
+    const loginPm = await this.authenticationRepository.login(loginDto);
     this.unpackRepositoryPmToVm(loginPm, "User logged in");
 
     if (loginPm.success) {
@@ -44,12 +44,9 @@ export class LoginRegisterPresenter extends MessagesPresenter {
     }
   };
 
-  register = async (email: string, password: string) => {
+  register = async (registerDto: LoginRegisterDto) => {
     this.init();
-    const registerPm = await this.authenticationRepository.register(
-      email,
-      password
-    );
+    const registerPm = await this.authenticationRepository.register(registerDto);
     this.unpackRepositoryPmToVm(registerPm, "User registered");
   };
 
