@@ -12,8 +12,10 @@ export const Books = observer(() => {
     <>
       <h1>Books</h1>
       <LastAddedBook />
-      <BookList />
+      <br />
       <AddBooks presenter={booksPresenter} />
+      <br />
+      <BookList />
       <br />
       <Messages />
     </>

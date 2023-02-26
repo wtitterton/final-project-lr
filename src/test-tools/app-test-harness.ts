@@ -4,7 +4,11 @@ import { FakeRouterGateway, Router, RouterRepository } from "../routing";
 import { LoginRegisterPresenter } from "../authentication";
 import { AppPresenter } from "../app-presenter";
 import { Container } from "inversify";
+import { BookDto, BooksRepository } from "../books";
+import { BooksListPresenter } from "../books/books-list-presenter";
 import { SingleBooksResultStub } from "./single-books-result-stub";
+import { GetSuccessfulBookAddedStub } from "./get-successful-book-added-stub";
+import { BooksPresenter } from "../books/books-presenter";
 
 interface RegistratonCredentials {
   email: string;
@@ -19,6 +23,7 @@ export class AppTestHarness {
   private routerRepository: RouterRepository;
   private routerGateway: FakeRouterGateway;
   private loginRegisterPresenter: LoginRegisterPresenter;
+  private booksListPresenter: BooksListPresenter;
 
   constructor() {
     this.container = new BaseIOC().buildBaseTemplate();
@@ -36,6 +41,8 @@ export class AppTestHarness {
     this.routerRepository = this.container.get(RouterRepository);
     this.routerGateway = this.container.get(Types.IRouterGateway);
     this.loginRegisterPresenter = this.container.get(LoginRegisterPresenter);
+    this.booksListPresenter = this.container.get(BooksListPresenter);
+
     let self = this;
 
     this.routerGateway.goToId = jest.fn().mockImplementation((routeId) => {
@@ -51,16 +58,12 @@ export class AppTestHarness {
   // 3. login or register to the app
   setupLogin = async (loginStub: () => any) => {
     this.httpGateway = this.container.get(Types.IDataGateway);
-    this.httpGateway.get = jest.fn().mockImplementation((path) => {
-      return Promise.resolve(SingleBooksResultStub);
-    });
-    this.httpGateway.post = jest.fn().mockImplementation((path) => {
-      return Promise.resolve(loginStub());
-    });
+    this.httpGateway.post = jest.fn().mockResolvedValue(loginStub());
 
     this.loginRegisterPresenter = this.container.get(LoginRegisterPresenter);
     this.loginRegisterPresenter.email = "a@b.com";
     this.loginRegisterPresenter.password = "123";
+
     await this.loginRegisterPresenter.login(
       this.loginRegisterPresenter.email,
       this.loginRegisterPresenter.password
@@ -80,10 +83,44 @@ export class AppTestHarness {
       return Promise.resolve(registrationStub());
     });
 
-    this.loginRegisterPresenter = this.container.get(LoginRegisterPresenter);
-
     await this.loginRegisterPresenter.register(email, password);
 
     return this.loginRegisterPresenter;
+  };
+
+  setupGetAllBooks = async (
+    getBooksStub: () => any
+  ): Promise<BooksListPresenter> => {
+    this.httpGateway = this.container.get(Types.IDataGateway);
+    this.httpGateway.get = jest.fn().mockResolvedValue(getBooksStub());
+    const booksRepository = this.container.get(BooksRepository);
+    await booksRepository.load();
+
+    return this.booksListPresenter;
+  };
+
+  setupAddBooks = async (book: BookDto, dynnamicBookId: number) => {
+    this.httpGateway = this.container.get(Types.IDataGateway);
+
+    const bookAddedResponse = GetSuccessfulBookAddedStub(dynnamicBookId);
+    this.httpGateway.post = jest.fn().mockResolvedValue(bookAddedResponse);
+
+    const getBooksReponse = SingleBooksResultStub();
+    const addedBook = {
+      id: bookAddedResponse.result.bookId,
+      name: book.name,
+      emailOwnerId: book.emailOwnerId,
+      devOwnerId: "pete@logicroom.co",
+    };
+
+    this.httpGateway.get = jest.fn().mockResolvedValue({
+      success: getBooksReponse.success,
+      result: [...getBooksReponse.result, addedBook],
+    });
+
+    const booksPresenter = this.container.get(BooksPresenter);
+    await booksPresenter.addBook(book);
+
+    return this.booksListPresenter;
   };
 }
