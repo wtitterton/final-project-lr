@@ -2,8 +2,8 @@ import { injectable, inject } from "inversify";
 import { makeObservable, computed } from "mobx";
 import { BooksPm, BooksRepository } from "./books-repository";
 
-interface BooksVm {
-  id: number;
+export interface BooksVm {
+  id?: number;
   visibleName: string;
 }
 

@@ -88,6 +88,25 @@ export class BooksRepository {
     return MessagePacking.unpackServerDtoToPm(addBookDto);
   };
 
+  getBooksById = async (bookIds: number[]): Promise<BooksPm[]> => {
+    const booksPromises = bookIds.map((bookId: number) => this.getBook(bookId));
+    return await Promise.all(booksPromises);
+  };
+
+  getBook = async (bookId: number): Promise<BooksPm> => {
+    const bookDto = await this.httpGateway.get<GetBooksResponse>(
+      "/book",
+      `?emailOwnerId=${this.userModel.email}&bookId=${bookId}`
+    );
+
+    const booksPm = {
+      id: bookId,
+      name: bookDto.result[0].name,
+    };
+
+    return booksPm;
+  };
+
   reset = () => {
     this.booksPm = [];
     this.messagePm = "UNSET";
