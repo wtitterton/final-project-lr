@@ -1,8 +1,6 @@
 import { observer } from "mobx-react";
 import { AddBooksPresenter } from "./books-presenter";
 import { useState } from "react";
-import { useInjection } from "inversify-react";
-import { UserModel } from "../authentication";
 import { useValidation, validateInput } from "../core";
 import { ValidationError } from "yup";
 import { addBookSchema } from "./add-book-schema";
@@ -13,7 +11,6 @@ interface AddBooksProps {
 
 export const AddBooks = observer(({ presenter }: AddBooksProps) => {
   const [bookName, setBookName] = useState<string>("");
-  const userModel = useInjection(UserModel);
   const [clientValidationMessages, updateClientValidationMessages] =
     useValidation();
 
@@ -23,10 +20,9 @@ export const AddBooks = observer(({ presenter }: AddBooksProps) => {
       updateClientValidationMessages([]);
       const addBookDto = {
         name: bookName,
-        emailOwnerId: userModel.email ?? "",
       };
       validateInput(addBookSchema, addBookDto);
-      presenter.addBook(addBookDto);
+      presenter.addBook(addBookDto.name);
       setBookName("");
     } catch (error: any) {
       if (error instanceof ValidationError) {

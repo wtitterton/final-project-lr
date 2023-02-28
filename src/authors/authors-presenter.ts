@@ -42,14 +42,11 @@ export class AuthorsPresenter
     );
   }
 
-  get books(): BooksVm[] {
-    return this.books;
+  get books(): any[] {
+    return this.authorsRepository.books;
   }
 
-  addBook = async (book: BookDto) => {
-    const bookVm = {
-      visibleName: book.name,
-    };
-    this.books.push(bookVm);
+  addBook = async (name: string) => {
+    this.authorsRepository.addBook(name);
   };
 }

@@ -2,7 +2,8 @@ import { injectable, inject } from "inversify";
 import { makeObservable, observable } from "mobx";
 import { HttpGateway, IMessagePacking, MessagePacking, Types } from "../core";
 import { UserModel } from "../authentication";
-import { BooksPm, BooksRepository } from "../books";
+import { BookDto, BooksPm, BooksRepository } from "../books";
+import { BooksVm } from "../books/books-list-presenter";
 
 export interface AuthorDto {
   authorId: number;
@@ -26,6 +27,7 @@ export interface GetAuthorsResponse {
 export class AuthorsRepository {
   public messagePm: string = "UNSET";
   public authors: AuthorsPm[] = [];
+  public books: BooksPm[] = [];
   constructor(
     @inject(Types.IDataGateway) private httpGateway: HttpGateway,
     @inject(UserModel) private userModel: UserModel,
@@ -38,7 +40,9 @@ export class AuthorsRepository {
   }
 
   load = async () => {
+    this.messagePm = "LOADING";
     this.authors = await this.getAuthorsAndBooks();
+    this.messagePm = "";
   };
 
   private constructAuthorPmWithBooksResponse = async (
@@ -68,7 +72,12 @@ export class AuthorsRepository {
     return await Promise.all(booksPromises);
   };
 
+  addBook = async (name: string) => {
+    this.booksRepository.booksPm = [...this.books, { name: name, id: 210 }];
+  };
+
   reset = () => {
     this.messagePm = "UNSET";
+    this.authors = [];
   };
 }

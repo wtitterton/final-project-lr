@@ -74,14 +74,22 @@ export class BooksRepository {
     });
   };
 
-  addBook = async (bookDto: BookDto): Promise<IMessagePacking> => {
+  addBook = async (name: string): Promise<IMessagePacking> => {
+    if (this.userModel.email === null) {
+      throw new Error("user model email not set");
+    }
+
+    const bookDto: BookDto = {
+      name: name,
+      emailOwnerId: this.userModel.email,
+    };
     const addBookDto = await this.httpGateway.post<BookDto, addBookResponse>(
       "/books",
       bookDto
     );
 
     if (addBookDto.success) {
-      this.lastAddedBookName = bookDto.name;
+      this.lastAddedBookName = name;
       this.load();
     }
 
