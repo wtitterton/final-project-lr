@@ -17,7 +17,7 @@ export interface BookDto {
 }
 
 export interface BooksPm {
-  id: number;
+  id: number | string;
   name: string;
 }
 
@@ -74,6 +74,13 @@ export class BooksRepository {
     });
   };
 
+  addBooks = async (bookNames: string[]): Promise<IMessagePacking[]> => {
+    const addBooksPromises = bookNames.map((bookName: string) =>
+      this.addBook(bookName)
+    );
+    return await Promise.all(addBooksPromises);
+  };
+
   addBook = async (name: string): Promise<IMessagePacking> => {
     if (this.userModel.email === null) {
       throw new Error("user model email not set");
@@ -87,11 +94,6 @@ export class BooksRepository {
       "/books",
       bookDto
     );
-
-    if (addBookDto.success) {
-      this.lastAddedBookName = name;
-      this.load();
-    }
 
     return MessagePacking.unpackServerDtoToPm(addBookDto);
   };

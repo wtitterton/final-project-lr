@@ -4,7 +4,8 @@ import { BookDto, BooksPm, BooksRepository } from "../books";
 import { MessagesPresenter, MessagesRepository } from "../core";
 import { AddBooksPresenter } from "../books/books-presenter";
 import { BooksVm } from "../books/books-list-presenter";
-import { AuthorsPm, AuthorsRepository } from "./authors-repository";
+import { AuthorsRepository } from "./authors-repository";
+import { AuthorBookService, AuthorWithBooks } from "./author-book-service";
 
 export interface AuthorVm {
   id: number;
@@ -18,13 +19,12 @@ export class AuthorsPresenter
   implements AddBooksPresenter
 {
   constructor(
-    @inject(AuthorsRepository) private authorsRepository: AuthorsRepository,
+    @inject(AuthorBookService) private authorsBooksService: AuthorBookService,
     @inject(MessagesRepository) private _messagesRepository: MessagesRepository
   ) {
     super(_messagesRepository);
     makeObservable(this, {
       authors: computed,
-      books: computed,
     });
   }
 
@@ -33,8 +33,8 @@ export class AuthorsPresenter
   };
 
   get authors(): AuthorVm[] {
-    return this.authorsRepository.authors.map(
-      (author: AuthorsPm): AuthorVm => ({
+    return this.authorsBooksService.authorWithBooks.map(
+      (author: AuthorWithBooks): AuthorVm => ({
         id: author.id,
         name: author.name,
         books: this.formatBooksString(author.books),
@@ -42,11 +42,19 @@ export class AuthorsPresenter
     );
   }
 
-  get books(): any[] {
-    return this.authorsRepository.books;
-  }
-
   addBook = async (name: string) => {
-    this.authorsRepository.addBook(name);
+    this.authorsBooksService.addBook(name);
+  };
+
+  addAuthor = async (authorName: string) => {
+    const addAuthorPm = await this.authorsBooksService.addAuthorAndBooks(
+      authorName
+    );
+
+    if (addAuthorPm.success) {
+      await this.authorsBooksService.load();
+    }
+
+    this.unpackRepositoryPmToVm(addAuthorPm, "Aurthor Added");
   };
 }

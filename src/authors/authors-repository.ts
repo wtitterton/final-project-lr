@@ -2,8 +2,7 @@ import { injectable, inject } from "inversify";
 import { makeObservable, observable } from "mobx";
 import { HttpGateway, IMessagePacking, MessagePacking, Types } from "../core";
 import { UserModel } from "../authentication";
-import { BookDto, BooksPm, BooksRepository } from "../books";
-import { BooksVm } from "../books/books-list-presenter";
+import { BooksRepository } from "../books";
 
 export interface AuthorDto {
   authorId: number;
@@ -12,10 +11,10 @@ export interface AuthorDto {
   bookIds: number[];
 }
 
-export interface AuthorsPm {
+export interface AuthorPm {
   id: number;
   name: string;
-  books: BooksPm[];
+  bookIds: number[];
 }
 
 export interface GetAuthorsResponse {
@@ -26,8 +25,8 @@ export interface GetAuthorsResponse {
 @injectable()
 export class AuthorsRepository {
   public messagePm: string = "UNSET";
-  public authors: AuthorsPm[] = [];
-  public books: BooksPm[] = [];
+  public authors: AuthorPm[] = [];
+
   constructor(
     @inject(Types.IDataGateway) private httpGateway: HttpGateway,
     @inject(UserModel) private userModel: UserModel,
@@ -41,39 +40,39 @@ export class AuthorsRepository {
 
   load = async () => {
     this.messagePm = "LOADING";
-    this.authors = await this.getAuthorsAndBooks();
+    this.authors = await this.getAuthors();
     this.messagePm = "";
   };
 
-  private constructAuthorPmWithBooksResponse = async (
-    author: AuthorDto
-  ): Promise<AuthorsPm> => {
-    const books = await this.booksRepository.getBooksById(author.bookIds);
-    const { authorId, name } = author;
-    return {
-      id: authorId,
-      name,
-      books: books,
-    };
-  };
-
-  getAuthorsAndBooks = async (): Promise<AuthorsPm[]> => {
+  getAuthors = async (): Promise<AuthorPm[]> => {
     const authorDto = await this.httpGateway.get<GetAuthorsResponse>(
       "/authors",
       `?emailOwnerId=${this.userModel.email}`
     );
 
-    const booksPromises = authorDto.result.map(
-      (author: AuthorDto): Promise<AuthorsPm> => {
-        return this.constructAuthorPmWithBooksResponse(author);
-      }
-    );
-
-    return await Promise.all(booksPromises);
+    const authorPm = authorDto.result.map((author: AuthorDto) => {
+      return {
+        id: author.authorId,
+        name: author.name,
+        bookIds: author.bookIds,
+      };
+    });
+    return authorPm;
   };
 
-  addBook = async (name: string) => {
-    this.booksRepository.booksPm = [...this.books, { name: name, id: 210 }];
+  addAuthorAndBooks = async (authorName: string, bookIds: number[]): Promise<IMessagePacking> => {
+    const authorDto: any = {
+      name: authorName,
+      bookIds: bookIds,
+      latLon: [],
+      emailOwnerId: this.userModel.email,
+    };
+    const addAuthorDto = await this.httpGateway.post<AuthorDto, any>(
+      "/authors",
+      authorDto
+    );
+
+    return MessagePacking.unpackServerDtoToPm(addAuthorDto);
   };
 
   reset = () => {

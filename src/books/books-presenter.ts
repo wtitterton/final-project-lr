@@ -36,6 +36,11 @@ export class BooksPresenter
     this.init();
     const addBookPm = await this.booksRepository.addBook(name);
 
+    if (addBookPm.success) {
+      await this.booksRepository.load();
+      this.booksRepository.lastAddedBookName = name;
+    }
+
     this.unpackRepositoryPmToVm(addBookPm, "Book Added");
   };
 

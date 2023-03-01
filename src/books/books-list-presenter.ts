@@ -3,7 +3,7 @@ import { makeObservable, computed } from "mobx";
 import { BooksPm, BooksRepository } from "./books-repository";
 
 export interface BooksVm {
-  id?: number;
+  id: number | string;
   visibleName: string;
 }
 
