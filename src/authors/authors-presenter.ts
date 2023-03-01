@@ -1,10 +1,8 @@
 import { injectable, inject } from "inversify";
 import { makeObservable, computed } from "mobx";
-import { BookDto, BooksPm, BooksRepository } from "../books";
+import { BooksPm } from "../books";
 import { MessagesPresenter, MessagesRepository } from "../core";
 import { AddBooksPresenter } from "../books/books-presenter";
-import { BooksVm } from "../books/books-list-presenter";
-import { AuthorsRepository } from "./authors-repository";
 import { AuthorBookService, AuthorWithBooks } from "./author-book-service";
 
 export interface AuthorVm {
