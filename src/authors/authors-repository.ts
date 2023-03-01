@@ -60,7 +60,10 @@ export class AuthorsRepository {
     return authorPm;
   };
 
-  addAuthorAndBooks = async (authorName: string, bookIds: number[]): Promise<IMessagePacking> => {
+  addAuthorAndBooks = async (
+    authorName: string,
+    bookIds: number[]
+  ): Promise<IMessagePacking> => {
     const authorDto: any = {
       name: authorName,
       bookIds: bookIds,
