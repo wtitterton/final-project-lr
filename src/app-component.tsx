@@ -5,8 +5,8 @@ import { Home } from "./home";
 import { LoginRegistrationPage } from "./authentication";
 import { useInjection } from "inversify-react";
 import { Navigation } from "./navigation";
-import { AddBooks, Books } from "./books";
-import { AddAuthors, Authors, Map, Policy } from "./authors";
+import { AddBooks, Books, BooksPresenter } from "./books";
+import { AddAuthor, Authors, Map, Policy } from "./authors";
 
 export const AppComponent = observer((props: any) => {
   const appPresenter = useInjection(AppPresenter);
@@ -25,16 +25,12 @@ export const AppComponent = observer((props: any) => {
       component: <Books key="booksLink" />,
     },
     {
-      id: "addBooksLink",
-      component: <AddBooks key="addBooksLink" />,
-    },
-    {
       id: "authorsLink",
       component: <Authors key="authorsLink" />,
     },
     {
       id: "addAuthorsLink",
-      component: <AddAuthors key="addAuthorsLink" />,
+      component: <AddAuthor key="addAuthorsLink" />,
     },
     {
       id: "authorsPolicyLink",

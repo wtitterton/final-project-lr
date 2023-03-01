@@ -14,15 +14,14 @@ let httpGateway: FakeHttpGateway;
 let onRouteChange = () => {};
 
 describe("Loading books", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     appTestHarness = new AppTestHarness();
     appTestHarness.bootStrap(onRouteChange);
     httpGateway = appTestHarness.container.get(Types.IDataGateway);
+    await appTestHarness.setupLogin(GetSuccessfulUserLoginStub);
   });
 
   it("Should make the correct api call to get all books", async () => {
-    // login so we have a populated user model
-    await appTestHarness.setupLogin(GetSuccessfulUserLoginStub);
     await appTestHarness.setupGetAllBooks(SingleBooksResultStub);
     // assert the correct api call
     expect(httpGateway.get).toHaveBeenCalledWith(
@@ -44,18 +43,17 @@ describe("Loading books", () => {
 });
 
 describe("Adding books", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     appTestHarness = new AppTestHarness();
     appTestHarness.bootStrap(onRouteChange);
     booksPresenter = appTestHarness.container.get(BooksPresenter);
     booksRepository = appTestHarness.container.get(BooksRepository);
     httpGateway = appTestHarness.container.get(Types.IDataGateway);
+    await appTestHarness.setupLogin(GetSuccessfulUserLoginStub);
   });
 
   it("Should reload books list on save", async () => {
     const NEW_BOOK_NAME = "New Book";
-    const EMAIL_OWNER_ID = "email@email.com";
-
     const bookRepositoryLoadSpy = jest.spyOn(booksRepository, "load");
 
     const booksListPresenter = await appTestHarness.setupGetAllBooks(
@@ -65,8 +63,7 @@ describe("Adding books", () => {
     expect(booksListPresenter.books.length).toBe(4);
 
     // pivot and add a book
-    const newBook = { name: NEW_BOOK_NAME, emailOwnerId: EMAIL_OWNER_ID };
-    await appTestHarness.setupAddBooks(newBook, 20);
+    await appTestHarness.setupAddBooks(NEW_BOOK_NAME, 20);
 
     expect(bookRepositoryLoadSpy).toBeCalled();
     expect(booksListPresenter.books.length).toBe(5);
@@ -75,30 +72,26 @@ describe("Adding books", () => {
 
   it("Should make the correct api calls when adding a book", async () => {
     const NEW_BOOK_NAME = "New Book";
-    const EMAIL_OWNER_ID = "email@email.com";
+    const EMAIL_OWNER_ID = "a@b.com";
 
     const newBook = { name: NEW_BOOK_NAME, emailOwnerId: EMAIL_OWNER_ID };
-    await appTestHarness.setupAddBooks(newBook, 20);
+    await appTestHarness.setupAddBooks(NEW_BOOK_NAME, 20);
 
     expect(httpGateway.post).toHaveBeenCalledWith("/books", newBook);
   });
 
   it("should update books message", async () => {
     const NEW_BOOK_NAME = "New Book";
-    const EMAIL_OWNER_ID = "email@email.com";
 
-    const newBook = { name: NEW_BOOK_NAME, emailOwnerId: EMAIL_OWNER_ID };
-    await appTestHarness.setupAddBooks(newBook, 20);
+    await appTestHarness.setupAddBooks(NEW_BOOK_NAME, 20);
 
     expect(booksPresenter.messages).toEqual(["Book Added"]);
   });
 
   it("should show name of most recently added book", async () => {
     const NEW_BOOK_NAME = "New Book";
-    const EMAIL_OWNER_ID = "email@email.com";
 
-    const newBook = { name: NEW_BOOK_NAME, emailOwnerId: EMAIL_OWNER_ID };
-    await appTestHarness.setupAddBooks(newBook, 20);
+    await appTestHarness.setupAddBooks(NEW_BOOK_NAME, 20);
 
     expect(booksPresenter.lastAddedBookName).toBe(NEW_BOOK_NAME);
   });

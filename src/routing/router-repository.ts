@@ -4,11 +4,14 @@ import { RouterGateway } from "./router-gateway";
 import { Route } from "./routes";
 import { Types } from "../core";
 import { BooksRepository } from "../books";
+import { AuthorsRepository } from "../authors/authors-repository";
+import { AuthorBookService } from "../authors/author-book-service";
 
 @injectable()
 export class RouterRepository {
   constructor(
     @inject(BooksRepository) private booksRepository: BooksRepository,
+    @inject(AuthorBookService) private authorsBooksService: AuthorBookService,
     @inject(Types.IRouterGateway) private routerGateway: RouterGateway
   ) {
     makeObservable(this, {
@@ -48,6 +51,13 @@ export class RouterRepository {
       routeDef: {
         path: "/app/authors",
         isSecure: true,
+      },
+      onEnter: async () => {
+        await this.authorsBooksService.load();
+      },
+      onLeave: () => {
+        console.log("leaving");
+        this.authorsBooksService.reset();
       },
     },
     {

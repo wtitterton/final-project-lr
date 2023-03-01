@@ -99,7 +99,7 @@ export class AppTestHarness {
     return this.booksListPresenter;
   };
 
-  setupAddBooks = async (book: BookDto, dynnamicBookId: number) => {
+  setupAddBooks = async (name: string, dynnamicBookId: number) => {
     this.httpGateway = this.container.get(Types.IDataGateway);
 
     const bookAddedResponse = GetSuccessfulBookAddedStub(dynnamicBookId);
@@ -108,8 +108,8 @@ export class AppTestHarness {
     const getBooksReponse = SingleBooksResultStub();
     const addedBook = {
       bookId: bookAddedResponse.result.bookId,
-      name: book.name,
-      emailOwnerId: book.emailOwnerId,
+      name: name,
+      emailOwnerId: "wftitterton@gmail.com",
       devOwnerId: "pete@logicroom.co",
     };
 
@@ -119,7 +119,7 @@ export class AppTestHarness {
     });
 
     const booksPresenter = this.container.get(BooksPresenter);
-    await booksPresenter.addBook(book);
+    await booksPresenter.addBook(name);
 
     return this.booksListPresenter;
   };

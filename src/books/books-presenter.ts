@@ -4,7 +4,7 @@ import { BookDto, BooksRepository } from "./books-repository";
 import { MessagesPresenter, MessagesRepository } from "../core";
 
 export interface AddBooksPresenter {
-  addBook: (book: BookDto) => Promise<void>;
+  addBook: (name: string) => Promise<void>;
 }
 
 @injectable()
@@ -32,9 +32,14 @@ export class BooksPresenter
     this.lastAddedBookName = newLastAddedBookName;
   }
 
-  addBook = async (book: BookDto): Promise<void> => {
+  addBook = async (name: string): Promise<void> => {
     this.init();
-    const addBookPm = await this.booksRepository.addBook(book);
+    const addBookPm = await this.booksRepository.addBook(name);
+
+    if (addBookPm.success) {
+      await this.booksRepository.load();
+      this.booksRepository.lastAddedBookName = name;
+    }
 
     this.unpackRepositoryPmToVm(addBookPm, "Book Added");
   };

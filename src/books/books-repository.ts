@@ -17,7 +17,7 @@ export interface BookDto {
 }
 
 export interface BooksPm {
-  id: number;
+  id: number | string;
   name: string;
 }
 
@@ -74,18 +74,47 @@ export class BooksRepository {
     });
   };
 
-  addBook = async (bookDto: BookDto): Promise<IMessagePacking> => {
+  addBooks = async (bookNames: string[]): Promise<IMessagePacking[]> => {
+    const addBooksPromises = bookNames.map((bookName: string) =>
+      this.addBook(bookName)
+    );
+    return await Promise.all(addBooksPromises);
+  };
+
+  addBook = async (name: string): Promise<IMessagePacking> => {
+    if (this.userModel.email === null) {
+      throw new Error("user model email not set");
+    }
+
+    const bookDto: BookDto = {
+      name: name,
+      emailOwnerId: this.userModel.email,
+    };
     const addBookDto = await this.httpGateway.post<BookDto, addBookResponse>(
       "/books",
       bookDto
     );
 
-    if (addBookDto.success) {
-      this.lastAddedBookName = bookDto.name;
-      this.load();
-    }
-
     return MessagePacking.unpackServerDtoToPm(addBookDto);
+  };
+
+  getBooksById = async (bookIds: number[]): Promise<BooksPm[]> => {
+    const booksPromises = bookIds.map((bookId: number) => this.getBook(bookId));
+    return await Promise.all(booksPromises);
+  };
+
+  getBook = async (bookId: number): Promise<BooksPm> => {
+    const bookDto = await this.httpGateway.get<GetBooksResponse>(
+      "/book",
+      `?emailOwnerId=${this.userModel.email}&bookId=${bookId}`
+    );
+
+    const booksPm = {
+      id: bookId,
+      name: bookDto.result[0].name,
+    };
+
+    return booksPm;
   };
 
   reset = () => {
