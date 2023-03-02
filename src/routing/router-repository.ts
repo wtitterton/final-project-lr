@@ -53,7 +53,7 @@ export class RouterRepository {
         isSecure: true,
       },
       onEnter: async () => {
-        await this.authorsBooksService.load();
+        //await this.authorsBooksService.load();
       },
       onLeave: () => {
         console.log("leaving");
