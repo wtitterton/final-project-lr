@@ -34,10 +34,6 @@ export class AuthorsPresenter
     return books.map((book: BooksPm) => book.name).join(",");
   };
 
-  // get toggleShowAuthors(): boolean {
-  //   return this.authorsBooksService.authorWithBooks.length <= 4;
-  // }
-
   load = async () => {
     const authorsBooksPm = await this.authorsBooksService.load();
     const authorsVm = authorsBooksPm.map(
@@ -50,16 +46,6 @@ export class AuthorsPresenter
     this.authors = authorsVm;
     this.toggleShowAuthors = authorsVm.length <= 4;
   };
-
-  // get authors(): AuthorVm[] {
-  //   return this.authorsBooksService.authorWithBooks.map(
-  //     (author: AuthorWithBooks): AuthorVm => ({
-  //       id: author.id,
-  //       name: author.name,
-  //       books: this.formatBooksString(author.books),
-  //     })
-  //   );
-  // }
 
   addBook = async (name: string) => {
     this.authorsBooksService.addBook(name);
