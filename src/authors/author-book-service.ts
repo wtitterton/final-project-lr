@@ -45,7 +45,7 @@ export class AuthorBookService {
 
   getAuthorsAndBooks = async (): Promise<AuthorWithBooks[]> => {
     const authorsPm = await this.authorsRepository.getAuthors();
-    
+
     const booksPromises = authorsPm.map(
       (author: AuthorPm): Promise<AuthorWithBooks> => {
         return this.constructAuthorPmWithBooksResponse(author);

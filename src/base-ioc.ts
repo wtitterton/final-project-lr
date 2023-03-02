@@ -38,7 +38,7 @@ export class BaseIOC {
       .bind(AuthorBookService)
       .to(AuthorBookService)
       .inSingletonScope();
-       this.container
+    this.container
       .bind(AuthorsPresenter)
       .to(AuthorsPresenter)
       .inSingletonScope();
