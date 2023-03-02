@@ -38,6 +38,10 @@ export class BaseIOC {
       .bind(AuthorBookService)
       .to(AuthorBookService)
       .inSingletonScope();
+       this.container
+      .bind(AuthorsPresenter)
+      .to(AuthorsPresenter)
+      .inSingletonScope();
     this.container
       .bind(AuthorsRepository)
       .to(AuthorsRepository)

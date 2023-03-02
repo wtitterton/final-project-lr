@@ -15,6 +15,7 @@ export interface AuthorWithBooks {
 export class AuthorBookService {
   public messagePm: string = "UNSET";
   public authorWithBooks: AuthorWithBooks[] = [];
+  public toggleShowAuthors: boolean = true;
 
   constructor(
     @inject(AuthorsRepository) private authorsRepository: AuthorsRepository,
@@ -27,9 +28,7 @@ export class AuthorBookService {
   }
 
   load = async () => {
-    this.messagePm = "LOADING";
-    this.authorWithBooks = await this.getAuthorsAndBooks();
-    this.messagePm = "";
+    return await this.getAuthorsAndBooks();
   };
 
   private constructAuthorPmWithBooksResponse = async (
@@ -46,14 +45,15 @@ export class AuthorBookService {
 
   getAuthorsAndBooks = async (): Promise<AuthorWithBooks[]> => {
     const authorsPm = await this.authorsRepository.getAuthors();
-
+    
     const booksPromises = authorsPm.map(
       (author: AuthorPm): Promise<AuthorWithBooks> => {
         return this.constructAuthorPmWithBooksResponse(author);
       }
     );
 
-    return await Promise.all(booksPromises);
+    const authorsBooksPm = await Promise.all(booksPromises);
+    return authorsBooksPm;
   };
 
   addAuthorAndBooks = async (authorName: string): Promise<IMessagePacking> => {
@@ -79,5 +79,8 @@ export class AuthorBookService {
     ];
   };
 
-  reset() {}
+  reset() {
+    this.authorsRepository.reset();
+    this.booksRepository.reset();
+  }
 }

@@ -1,5 +1,5 @@
 import { injectable, inject } from "inversify";
-import { makeObservable, computed } from "mobx";
+import { makeObservable, computed, observable } from "mobx";
 import { BooksPm } from "../books";
 import { MessagesPresenter, MessagesRepository } from "../core";
 import { AddBooksPresenter } from "../books/books-presenter";
@@ -16,13 +16,18 @@ export class AuthorsPresenter
   extends MessagesPresenter
   implements AddBooksPresenter
 {
+
+  public authors: AuthorVm[] = []
+  public toggleShowAuthors: boolean = true;
+
   constructor(
     @inject(AuthorBookService) private authorsBooksService: AuthorBookService,
     @inject(MessagesRepository) private _messagesRepository: MessagesRepository
   ) {
     super(_messagesRepository);
     makeObservable(this, {
-      authors: computed,
+      authors: observable,
+      toggleShowAuthors: observable
     });
   }
 
@@ -30,15 +35,32 @@ export class AuthorsPresenter
     return books.map((book: BooksPm) => book.name).join(",");
   };
 
-  get authors(): AuthorVm[] {
-    return this.authorsBooksService.authorWithBooks.map(
+  // get toggleShowAuthors(): boolean {
+  //   return this.authorsBooksService.authorWithBooks.length <= 4;
+  // }
+
+  load = async () => {
+     const authorsBooksPm = await this.authorsBooksService.load();
+     const authorsVm = authorsBooksPm.map(
       (author: AuthorWithBooks): AuthorVm => ({
         id: author.id,
         name: author.name,
         books: this.formatBooksString(author.books),
       })
     );
+    this.authors = authorsVm;
+    this.toggleShowAuthors = authorsVm.length <= 4;
   }
+
+  // get authors(): AuthorVm[] {
+  //   return this.authorsBooksService.authorWithBooks.map(
+  //     (author: AuthorWithBooks): AuthorVm => ({
+  //       id: author.id,
+  //       name: author.name,
+  //       books: this.formatBooksString(author.books),
+  //     })
+  //   );
+  // }
 
   addBook = async (name: string) => {
     this.authorsBooksService.addBook(name);
@@ -50,7 +72,8 @@ export class AuthorsPresenter
     );
 
     if (addAuthorPm.success) {
-      await this.authorsBooksService.load();
+      await this.load();
+      this.authorsBooksService.reset()
     }
 
     this.unpackRepositoryPmToVm(addAuthorPm, "Aurthor Added");

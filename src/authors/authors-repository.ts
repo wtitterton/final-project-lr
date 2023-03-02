@@ -26,7 +26,7 @@ export interface GetAuthorsResponse {
 export class AuthorsRepository {
   public messagePm: string = "UNSET";
   public authors: AuthorPm[] = [];
-
+  
   constructor(
     @inject(Types.IDataGateway) private httpGateway: HttpGateway,
     @inject(UserModel) private userModel: UserModel,
@@ -57,6 +57,7 @@ export class AuthorsRepository {
         bookIds: author.bookIds,
       };
     });
+
     return authorPm;
   };
 
