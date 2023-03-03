@@ -13,7 +13,7 @@ export const AddAuthor = observer(() => {
   const [authorName, setAuthorName] = useState<string>("");
   const authorPresenter = useInjection(AuthorsPresenter);
 
-  const handleFormSubmission = async (event: React.SyntheticEvent) => {
+  const handleFormSubmission = (event: React.SyntheticEvent) => {
     event.preventDefault();
     try {
       updateClientValidationMessages([]);
@@ -21,7 +21,7 @@ export const AddAuthor = observer(() => {
         name: authorName,
       };
       validateInput(addAuthorSchema, addBookDto);
-      await authorPresenter.addAuthor(authorName);
+      authorPresenter.addAuthor(authorName);
       setAuthorName("");
     } catch (error: any) {
       if (error instanceof ValidationError) {
