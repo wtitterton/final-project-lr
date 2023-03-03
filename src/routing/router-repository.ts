@@ -52,11 +52,7 @@ export class RouterRepository {
         path: "/app/authors",
         isSecure: true,
       },
-      onEnter: async () => {
-        //await this.authorsBooksService.load();
-      },
       onLeave: () => {
-        console.log("leaving");
         this.authorsBooksService.reset();
       },
     },
