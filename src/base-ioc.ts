@@ -34,9 +34,13 @@ export class BaseIOC {
       .inSingletonScope();
     this.container.bind<UserModel>(UserModel).to(UserModel).inSingletonScope();
     this.container.bind(BooksRepository).to(BooksRepository).inSingletonScope();
+    // this.container
+    //   .bind(AuthorBookService)
+    //   .to(AuthorBookService)
+    //   .inSingletonScope();
     this.container
-      .bind(AuthorBookService)
-      .to(AuthorBookService)
+      .bind(AuthorsPresenter)
+      .to(AuthorsPresenter)
       .inSingletonScope();
     this.container
       .bind(AuthorsRepository)

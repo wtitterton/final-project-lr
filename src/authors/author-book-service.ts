@@ -1,6 +1,6 @@
 import { injectable, inject } from "inversify";
 import { makeObservable, observable } from "mobx";
-import { IMessagePacking, MessagePacking } from "../core";
+import { IMessagePacking } from "../core";
 import { BooksPm, BooksRepository } from "../books";
 import { AuthorPm, AuthorsRepository } from "./authors-repository";
 import { v4 as uuidv4 } from "uuid";
@@ -13,7 +13,6 @@ export interface AuthorWithBooks {
 
 @injectable()
 export class AuthorBookService {
-  public messagePm: string = "UNSET";
   public authorWithBooks: AuthorWithBooks[] = [];
 
   constructor(
@@ -22,14 +21,11 @@ export class AuthorBookService {
   ) {
     makeObservable(this, {
       authorWithBooks: observable,
-      messagePm: observable,
     });
   }
 
   load = async () => {
-    this.messagePm = "LOADING";
-    this.authorWithBooks = await this.getAuthorsAndBooks();
-    this.messagePm = "";
+    return await this.getAuthorsAndBooks();
   };
 
   private constructAuthorPmWithBooksResponse = async (
@@ -46,27 +42,28 @@ export class AuthorBookService {
 
   getAuthorsAndBooks = async (): Promise<AuthorWithBooks[]> => {
     const authorsPm = await this.authorsRepository.getAuthors();
-
     const booksPromises = authorsPm.map(
       (author: AuthorPm): Promise<AuthorWithBooks> => {
         return this.constructAuthorPmWithBooksResponse(author);
       }
     );
 
-    return await Promise.all(booksPromises);
+    const authorsBooksPm = await Promise.all(booksPromises);
+    return authorsBooksPm;
   };
 
   addAuthorAndBooks = async (authorName: string): Promise<IMessagePacking> => {
-    const bookNames = this.booksRepository.booksPm.map(
-      (book: BooksPm) => book.name
+    const bookPromises = this.booksRepository.booksPm.map((book: BooksPm) =>
+      this.booksRepository.addBook(book.name)
     );
-    const addedBooksPm = await this.booksRepository.addBooks(bookNames);
-    const bookIds = addedBooksPm.map(
-      (bookPm: IMessagePacking) => bookPm.result.bookId
-    );
+
+    const booksPm = await Promise.all(bookPromises);
+
     const addAuthorPm = await this.authorsRepository.addAuthorAndBooks(
       authorName,
-      bookIds
+      booksPm.map((book: any) => {
+        return book.result.bookId;
+      })
     );
 
     return addAuthorPm;
@@ -79,5 +76,8 @@ export class AuthorBookService {
     ];
   };
 
-  reset() {}
+  reset() {
+    this.authorsRepository.reset();
+    this.booksRepository.reset();
+  }
 }

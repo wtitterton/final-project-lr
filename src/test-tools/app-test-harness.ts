@@ -9,6 +9,9 @@ import { BooksListPresenter } from "../books/books-list-presenter";
 import { SingleBooksResultStub } from "./single-books-result-stub";
 import { GetSuccessfulBookAddedStub } from "./get-successful-book-added-stub";
 import { BooksPresenter } from "../books/books-presenter";
+import { SingleAuthorsResultStub } from "./single-authors-result-stub";
+import { AuthorsPresenter } from "../authors";
+import { SingleBookResultStub } from "./single-book-result-stub";
 
 interface RegistratonCredentials {
   email: string;
@@ -24,6 +27,7 @@ export class AppTestHarness {
   private routerGateway: FakeRouterGateway;
   private loginRegisterPresenter: LoginRegisterPresenter;
   private booksListPresenter: BooksListPresenter;
+  private authorPresenter: AuthorsPresenter;
 
   constructor() {
     this.container = new BaseIOC().buildBaseTemplate();
@@ -42,6 +46,7 @@ export class AppTestHarness {
     this.routerGateway = this.container.get(Types.IRouterGateway);
     this.loginRegisterPresenter = this.container.get(LoginRegisterPresenter);
     this.booksListPresenter = this.container.get(BooksListPresenter);
+    this.authorPresenter = this.container.get(AuthorsPresenter);
 
     let self = this;
 
@@ -122,5 +127,37 @@ export class AppTestHarness {
     await booksPresenter.addBook(name);
 
     return this.booksListPresenter;
+  };
+
+  setupLoadAuthors = async (
+    bookNames: string[],
+    numberOfResults?: number
+  ): Promise<AuthorsPresenter> => {
+    this.httpGateway = this.container.get(Types.IDataGateway);
+    const { success, result } = SingleAuthorsResultStub();
+
+    const authorsResponse = {
+      success,
+      result,
+    };
+
+    if (numberOfResults !== undefined && numberOfResults < result.length) {
+      authorsResponse.result = result.slice(0, numberOfResults);
+    }
+
+    const mockResponses = jest.fn().mockResolvedValueOnce(authorsResponse);
+
+    authorsResponse.result.forEach((author) => {
+      author.bookIds.forEach((bookId: number) => {
+        mockResponses.mockResolvedValueOnce(
+          SingleBookResultStub(bookId, bookNames[bookId - 1])
+        );
+      });
+    });
+
+    this.httpGateway.get = mockResponses;
+
+    await this.authorPresenter.load();
+    return this.authorPresenter;
   };
 }

@@ -57,6 +57,7 @@ export class AuthorsRepository {
         bookIds: author.bookIds,
       };
     });
+
     return authorPm;
   };
 
