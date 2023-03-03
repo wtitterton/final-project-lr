@@ -84,7 +84,7 @@ export class BooksRepository {
       emailOwnerId: this.userModel.email,
     };
     const addBookDto = await this.httpGateway.post<BookDto, addBookResponse>(
-      "/books",
+      `/books`,
       bookDto
     );
 

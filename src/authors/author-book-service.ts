@@ -45,7 +45,6 @@ export class AuthorBookService {
 
   getAuthorsAndBooks = async (): Promise<AuthorWithBooks[]> => {
     const authorsPm = await this.authorsRepository.getAuthors();
-
     const booksPromises = authorsPm.map(
       (author: AuthorPm): Promise<AuthorWithBooks> => {
         return this.constructAuthorPmWithBooksResponse(author);
@@ -57,15 +56,17 @@ export class AuthorBookService {
   };
 
   addAuthorAndBooks = async (authorName: string): Promise<IMessagePacking> => {
-    const bookPromises = this.booksRepository.booksPm.map(
-      (book: BooksPm) => this.booksRepository.addBook(book.name)
+    const bookPromises = this.booksRepository.booksPm.map((book: BooksPm) =>
+      this.booksRepository.addBook(book.name)
     );
 
-    const bookPms = await  Promise.all(bookPromises);
-    
+    const bookPms = await Promise.all(bookPromises);
+
     const addAuthorPm = await this.authorsRepository.addAuthorAndBooks(
-     authorName,
-     bookPms.map((book: any) => {return book.result.bookId})
+      authorName,
+      bookPms.map((book: any) => {
+        return book.result.bookId;
+      })
     );
 
     return addAuthorPm;
