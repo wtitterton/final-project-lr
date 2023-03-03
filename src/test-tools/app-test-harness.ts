@@ -9,10 +9,7 @@ import { BooksListPresenter } from "../books/books-list-presenter";
 import { SingleBooksResultStub } from "./single-books-result-stub";
 import { GetSuccessfulBookAddedStub } from "./get-successful-book-added-stub";
 import { BooksPresenter } from "../books/books-presenter";
-import {
-  SingleAuthorsResultStub,
-  bookNames,
-} from "./single-authors-result-stub";
+import { SingleAuthorsResultStub } from "./single-authors-result-stub";
 import { AuthorsPresenter } from "../authors";
 import { SingleBookResultStub } from "./single-book-result-stub";
 
@@ -133,6 +130,7 @@ export class AppTestHarness {
   };
 
   setupLoadAuthors = async (
+    bookNames: string[],
     numberOfResults?: number
   ): Promise<AuthorsPresenter> => {
     this.httpGateway = this.container.get(Types.IDataGateway);

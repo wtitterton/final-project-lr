@@ -1,5 +1,3 @@
-export const bookNames = ["book 1", "book 2", "book 3"];
-
 export function SingleAuthorsResultStub() {
   return {
     success: true,

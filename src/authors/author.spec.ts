@@ -11,8 +11,7 @@ let authorsPresenter: AuthorsPresenter;
 let booksRepository: BooksRepository;
 let onRouteChange = () => {};
 
-let dynamicBookNamesStack = null;
-let dynamicBookIdStack = null;
+let dynamicBookNamesStack = ["book 1", "book 2", "book 3"];
 
 describe("Loading authors and books", () => {
   beforeEach(async () => {
@@ -23,7 +22,9 @@ describe("Loading authors and books", () => {
   });
 
   it("should load list author and books into ViewModel", async () => {
-    const { authors } = await appTestHarness.setupLoadAuthors();
+    const { authors } = await appTestHarness.setupLoadAuthors(
+      dynamicBookNamesStack
+    );
     expect(authors.length).toBe(5);
 
     // spot check
@@ -35,14 +36,14 @@ describe("Loading authors and books", () => {
 
   it("should show author list (toggle) when has authors", async () => {
     const { authors, toggleShowAuthors } =
-      await appTestHarness.setupLoadAuthors(3);
+      await appTestHarness.setupLoadAuthors(dynamicBookNamesStack, 3);
     expect(authors.length).toBe(3);
     expect(toggleShowAuthors).toBe(true);
   });
 
   it("should hide author list (toggle) when has more than 4 authors", async () => {
     const { authors, toggleShowAuthors } =
-      await appTestHarness.setupLoadAuthors();
+      await appTestHarness.setupLoadAuthors(dynamicBookNamesStack);
     expect(authors.length).toBe(5);
     expect(toggleShowAuthors).toBe(false);
   });
