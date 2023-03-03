@@ -9,7 +9,7 @@ export function SingleBookResultStub(
         bookId: dynnamicBookId,
         name: dynamicBookName ?? "Iron man",
         emailOwnerId: "g@b.com",
-        devOwnerId: "pete+dnd@logicroom.co",
+        devOwnerId: "example@example.com",
       },
     ],
   };
