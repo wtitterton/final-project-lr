@@ -12,13 +12,12 @@ import { UserModel } from "./user-model";
 
 let appTestHarness: AppTestHarness;
 let router: Router;
-let onRouteChange = () => {};
 let userModel: UserModel;
 
 describe("Register", () => {
   beforeEach(() => {
     appTestHarness = new AppTestHarness();
-    appTestHarness.bootStrap(onRouteChange);
+    appTestHarness.bootStrap(() => {});
     router = appTestHarness.container.get(Types.IRouter);
     userModel = appTestHarness.container.get(UserModel);
   });
@@ -59,7 +58,7 @@ describe("Login", () => {
   beforeEach(() => {
     jest.resetAllMocks();
     appTestHarness = new AppTestHarness();
-    appTestHarness.bootStrap(onRouteChange);
+    appTestHarness.bootStrap(() => {});
     router = appTestHarness.container.get(Types.IRouter);
     userModel = appTestHarness.container.get(UserModel);
   });

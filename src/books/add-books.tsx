@@ -18,11 +18,8 @@ export const AddBooks = observer(({ presenter }: AddBooksProps) => {
     event.preventDefault();
     try {
       updateClientValidationMessages([]);
-      const addBookDto = {
-        name: bookName,
-      };
-      validateInput(addBookSchema, addBookDto);
-      presenter.addBook(addBookDto.name);
+      validateInput(addBookSchema, { name: bookName });
+      presenter.addBook(bookName);
       setBookName("");
     } catch (error: any) {
       if (error instanceof ValidationError) {

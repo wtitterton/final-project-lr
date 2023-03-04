@@ -36,25 +36,25 @@ interface addBookResponse {
 
 @injectable()
 export class BooksRepository {
-  public messagePm: string = "UNSET";
   public booksPm: BooksPm[] = [];
   public lastAddedBookName: string | null = null;
+  public loading: boolean = false;
 
   constructor(
     @inject(Types.IDataGateway) private httpGateway: HttpGateway,
     @inject(UserModel) private userModel: UserModel
   ) {
     makeObservable(this, {
-      messagePm: observable,
       booksPm: observable,
       lastAddedBookName: observable,
+      loading: observable,
     });
   }
 
   load = async () => {
-    this.messagePm = "LOADING";
+    this.loading = true;
     this.booksPm = await this.getBooks();
-    this.messagePm = "";
+    this.loading = false;
   };
 
   getBooks = async (): Promise<BooksPm[]> => {
@@ -74,9 +74,16 @@ export class BooksRepository {
     });
   };
 
+  addBooks = async (bookNames: string[]): Promise<IMessagePacking[]> => {
+    const booksPromises = bookNames.map((bookName: string) =>
+      this.addBook(bookName)
+    );
+    return await Promise.all(booksPromises);
+  };
+
   addBook = async (name: string): Promise<IMessagePacking> => {
     if (this.userModel.email === null) {
-      throw new Error("user model email not set");
+      throw new Error("user model email not set!");
     }
 
     const bookDto: BookDto = {
@@ -112,6 +119,6 @@ export class BooksRepository {
 
   reset = () => {
     this.booksPm = [];
-    this.messagePm = "UNSET";
+    this.loading = false;
   };
 }

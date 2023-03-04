@@ -5,7 +5,6 @@ import { ValidationError } from "yup";
 import { addAuthorSchema } from "./add-author-schema";
 import { useInjection } from "inversify-react";
 import { AuthorsPresenter } from "./authors-presenter";
-import { AuthorBookService } from "./author-book-service";
 
 export const AddAuthor = observer(() => {
   const [clientValidationMessages, updateClientValidationMessages] =
@@ -17,10 +16,7 @@ export const AddAuthor = observer(() => {
     event.preventDefault();
     try {
       updateClientValidationMessages([]);
-      const addBookDto = {
-        name: authorName,
-      };
-      validateInput(addAuthorSchema, addBookDto);
+      validateInput(addAuthorSchema, { name: authorName });
       authorPresenter.addAuthor(authorName);
       setAuthorName("");
     } catch (error: any) {
