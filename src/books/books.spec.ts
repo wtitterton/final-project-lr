@@ -11,19 +11,18 @@ let appTestHarness: AppTestHarness;
 let booksPresenter: BooksPresenter;
 let booksRepository: BooksRepository;
 let httpGateway: FakeHttpGateway;
-let onRouteChange = () => {};
 
 describe("Loading books", () => {
   beforeEach(async () => {
     appTestHarness = new AppTestHarness();
-    appTestHarness.bootStrap(onRouteChange);
+    appTestHarness.bootStrap(() => {});
     httpGateway = appTestHarness.container.get(Types.IDataGateway);
     await appTestHarness.setupLogin(GetSuccessfulUserLoginStub);
   });
 
   it("Should make the correct api call to get all books", async () => {
     await appTestHarness.setupGetAllBooks(SingleBooksResultStub);
-    // assert the correct api call
+
     expect(httpGateway.get).toHaveBeenCalledWith(
       "/books",
       `?emailOwnerId=a@b.com`
@@ -36,6 +35,7 @@ describe("Loading books", () => {
     );
 
     expect(books.length).toBe(4);
+    
     // Spot check
     expect(books[1].visibleName).toBe("I, Robot");
     expect(books[3].visibleName).toBe("Wind In The Willows 2");
@@ -45,7 +45,7 @@ describe("Loading books", () => {
 describe("Adding books", () => {
   beforeEach(async () => {
     appTestHarness = new AppTestHarness();
-    appTestHarness.bootStrap(onRouteChange);
+    appTestHarness.bootStrap(() => {});
     booksPresenter = appTestHarness.container.get(BooksPresenter);
     booksRepository = appTestHarness.container.get(Types.IBooksRepository);
     httpGateway = appTestHarness.container.get(Types.IDataGateway);
@@ -63,7 +63,7 @@ describe("Adding books", () => {
     expect(booksListPresenter.books.length).toBe(4);
 
     // pivot and add a book
-    await appTestHarness.setupAddBooks(NEW_BOOK_NAME, 20);
+    await appTestHarness.setupAddBook(NEW_BOOK_NAME, 20);
 
     expect(bookRepositoryLoadSpy).toBeCalled();
     expect(booksListPresenter.books.length).toBe(5);
@@ -75,7 +75,7 @@ describe("Adding books", () => {
     const EMAIL_OWNER_ID = "a@b.com";
 
     const newBook = { name: NEW_BOOK_NAME, emailOwnerId: EMAIL_OWNER_ID };
-    await appTestHarness.setupAddBooks(NEW_BOOK_NAME, 20);
+    await appTestHarness.setupAddBook(NEW_BOOK_NAME, 20);
 
     expect(httpGateway.post).toHaveBeenCalledWith("/books", newBook);
   });
@@ -83,7 +83,7 @@ describe("Adding books", () => {
   it("should update books message", async () => {
     const NEW_BOOK_NAME = "New Book";
 
-    await appTestHarness.setupAddBooks(NEW_BOOK_NAME, 20);
+    await appTestHarness.setupAddBook(NEW_BOOK_NAME, 20);
 
     expect(booksPresenter.messages).toEqual(["Book Added"]);
   });
@@ -91,7 +91,7 @@ describe("Adding books", () => {
   it("should show name of most recently added book", async () => {
     const NEW_BOOK_NAME = "New Book";
 
-    await appTestHarness.setupAddBooks(NEW_BOOK_NAME, 20);
+    await appTestHarness.setupAddBook(NEW_BOOK_NAME, 20);
 
     expect(booksPresenter.lastAddedBookName).toBe(NEW_BOOK_NAME);
   });

@@ -108,7 +108,7 @@ export class AppTestHarness {
     return this.booksListPresenter;
   };
 
-  setupAddBooks = async (name: string, dynnamicBookId: number) => {
+  setupAddBook = async (name: string, dynnamicBookId: number) => {
     this.httpGateway = this.container.get(Types.IDataGateway);
 
     const bookAddedResponse = GetSuccessfulBookAddedStub(dynnamicBookId);
@@ -119,7 +119,7 @@ export class AppTestHarness {
       bookId: bookAddedResponse.result.bookId,
       name: name,
       emailOwnerId: "wftitterton@gmail.com",
-      devOwnerId: "pete@logicroom.co",
+      devOwnerId: "wftitterton@gmail.com",
     };
 
     this.httpGateway.get = jest.fn().mockResolvedValue({
@@ -133,7 +133,7 @@ export class AppTestHarness {
     return this.booksListPresenter;
   };
 
-  private setupStubsForBookAPICalls = (
+  private setupStubsForAuthorAndBooksAPICalls = (
     bookNames: string[],
     numberOfResults?: number,
     additionalAuthors: AuthorDto[] = []
@@ -197,9 +197,9 @@ export class AppTestHarness {
     );
 
     this.httpGateway.post = mockedAddAuthorAndBooksResponses;
-    this.httpGateway.get = this.setupStubsForBookAPICalls(
+    this.httpGateway.get = this.setupStubsForAuthorAndBooksAPICalls(
       booksNames,
-      result.length + 1, // include the new author
+      result.length + 1, // includes the new author in the response
       [newAuthor]
     );
 
@@ -212,7 +212,7 @@ export class AppTestHarness {
     numberOfResults?: number
   ): Promise<AuthorsPresenter> => {
     this.httpGateway = this.container.get(Types.IDataGateway);
-    this.httpGateway.get = this.setupStubsForBookAPICalls(
+    this.httpGateway.get = this.setupStubsForAuthorAndBooksAPICalls(
       bookNames,
       numberOfResults
     );

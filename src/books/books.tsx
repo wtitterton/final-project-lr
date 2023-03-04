@@ -12,6 +12,7 @@ export const Books = observer(() => {
   return (
     <>
       <h1>Books</h1>
+      {booksPresenter.loading && "LOADING"}
       <LastAddedBook />
       <br />
       <AddBooks presenter={booksPresenter} />

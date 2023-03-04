@@ -19,13 +19,17 @@ export class BooksPresenter
     super(_messagesRepository);
     makeObservable(this, {
       lastAddedBookName: computed,
+      loading: computed,
     });
   }
 
   get lastAddedBookName() {
-    // vm
     const lastAddedBookVm = this.booksRepository.lastAddedBookName;
     return lastAddedBookVm;
+  }
+
+  get loading() {
+    return this.booksRepository.loading
   }
 
   set lastAddedBookName(newLastAddedBookName) {
