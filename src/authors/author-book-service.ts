@@ -55,7 +55,9 @@ export class AuthorBookService {
   };
 
   addAuthorAndBooks = async (authorName: string): Promise<IMessagePacking> => {
-    const bookNames = this.booksRepository.booksPm.map((book: BooksPm) => book.name);
+    const bookNames = this.booksRepository.booksPm.map(
+      (book: BooksPm) => book.name
+    );
     const bookPromises = await this.booksRepository.addBooks(bookNames);
 
     const booksPm = await Promise.all(bookPromises);
