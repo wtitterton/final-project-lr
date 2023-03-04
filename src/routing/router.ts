@@ -3,11 +3,12 @@ import { inject, injectable } from "inversify";
 import { makeObservable, computed, action } from "mobx";
 import { RouterRepository } from "./router-repository";
 import { UserModel } from "../authentication";
+import { Types } from "../core";
 
 @injectable()
 export class Router {
   constructor(
-    @inject(RouterRepository) private routerRepository: RouterRepository,
+    @inject(Types.IRouterRepository) private routerRepository: RouterRepository,
     @inject(UserModel) private userModel: UserModel
   ) {
     makeObservable(this, {

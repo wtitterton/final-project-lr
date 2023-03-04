@@ -25,7 +25,7 @@ export class BaseIOC {
       .to(MessagesRepository)
       .inSingletonScope();
     this.container
-      .bind<RouterRepository>(RouterRepository)
+      .bind<RouterRepository>(Types.IRouterRepository)
       .to(RouterRepository)
       .inSingletonScope();
     this.container
@@ -33,17 +33,20 @@ export class BaseIOC {
       .to(NavigationRepository)
       .inSingletonScope();
     this.container.bind<UserModel>(UserModel).to(UserModel).inSingletonScope();
-    this.container.bind(BooksRepository).to(BooksRepository).inSingletonScope();
-    // this.container
-    //   .bind(AuthorBookService)
-    //   .to(AuthorBookService)
-    //   .inSingletonScope();
+    this.container
+      .bind<BooksRepository>(Types.IBooksRepository)
+      .to(BooksRepository)
+      .inSingletonScope();
+    this.container
+      .bind(AuthorBookService)
+      .to(AuthorBookService)
+      .inSingletonScope();
     this.container
       .bind(AuthorsPresenter)
       .to(AuthorsPresenter)
       .inSingletonScope();
     this.container
-      .bind(AuthorsRepository)
+      .bind<AuthorsRepository>(Types.IAuthorsRepository)
       .to(AuthorsRepository)
       .inSingletonScope();
     return this.container;

@@ -1,6 +1,7 @@
 import { injectable, inject } from "inversify";
 import { makeObservable, computed } from "mobx";
 import { BooksPm, BooksRepository } from "./books-repository";
+import { Types } from "../core";
 
 export interface BooksVm {
   id: number | string;
@@ -10,7 +11,7 @@ export interface BooksVm {
 @injectable()
 export class BooksListPresenter {
   constructor(
-    @inject(BooksRepository) private booksRepository: BooksRepository
+    @inject(Types.IBooksRepository) private booksRepository: BooksRepository
   ) {
     makeObservable(this, {
       books: computed,

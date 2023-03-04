@@ -8,12 +8,10 @@ import { AddAuthor } from "./add-author";
 import { useEffect, useState } from "react";
 export const Authors = observer((props: any) => {
   const authorsPresenter = useInjection(AuthorsPresenter);
-  console.log("toggle", authorsPresenter.toggleShowAuthors);
 
   useEffect(() => {
     const load = async () => {
       await authorsPresenter.load();
-      console.log("loading");
     };
 
     load();

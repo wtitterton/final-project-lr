@@ -2,6 +2,7 @@ export * from "./app-test-harness";
 export * from "./single-authors-result-stub";
 export * from "./single-book-result-stub";
 export * from "./single-books-result-stub";
+export * from "./get-succesful-author-added-stub";
 export * from "./get-succesful-registration-stub";
 export * from "./get-succesful-user-login-stub";
 export * from "./get-failed-registration-stub";

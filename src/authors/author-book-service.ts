@@ -1,6 +1,6 @@
 import { injectable, inject } from "inversify";
 import { makeObservable, observable } from "mobx";
-import { IMessagePacking } from "../core";
+import { IMessagePacking, Types } from "../core";
 import { BooksPm, BooksRepository } from "../books";
 import { AuthorPm, AuthorsRepository } from "./authors-repository";
 import { v4 as uuidv4 } from "uuid";
@@ -16,8 +16,9 @@ export class AuthorBookService {
   public authorWithBooks: AuthorWithBooks[] = [];
 
   constructor(
-    @inject(AuthorsRepository) private authorsRepository: AuthorsRepository,
-    @inject(BooksRepository) private booksRepository: BooksRepository
+    @inject(Types.IAuthorsRepository)
+    private authorsRepository: AuthorsRepository,
+    @inject(Types.IBooksRepository) private booksRepository: BooksRepository
   ) {
     makeObservable(this, {
       authorWithBooks: observable,
@@ -58,7 +59,6 @@ export class AuthorBookService {
     );
 
     const booksPm = await Promise.all(bookPromises);
-
     const addAuthorPm = await this.authorsRepository.addAuthorAndBooks(
       authorName,
       booksPm.map((book: any) => {

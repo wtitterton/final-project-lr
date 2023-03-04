@@ -1,7 +1,7 @@
 import { injectable, inject } from "inversify";
 import { makeObservable, computed } from "mobx";
 import { BookDto, BooksRepository } from "./books-repository";
-import { MessagesPresenter, MessagesRepository } from "../core";
+import { MessagesPresenter, MessagesRepository, Types } from "../core";
 
 export interface AddBooksPresenter {
   addBook: (name: string) => Promise<void>;
@@ -13,7 +13,7 @@ export class BooksPresenter
   implements AddBooksPresenter
 {
   constructor(
-    @inject(BooksRepository) private booksRepository: BooksRepository,
+    @inject(Types.IBooksRepository) private booksRepository: BooksRepository,
     @inject(MessagesRepository) private _messagesRepository: MessagesRepository
   ) {
     super(_messagesRepository);

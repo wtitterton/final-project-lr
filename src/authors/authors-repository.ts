@@ -30,7 +30,7 @@ export class AuthorsRepository {
   constructor(
     @inject(Types.IDataGateway) private httpGateway: HttpGateway,
     @inject(UserModel) private userModel: UserModel,
-    @inject(BooksRepository) private booksRepository: BooksRepository
+    @inject(Types.IBooksRepository) private booksRepository: BooksRepository
   ) {
     makeObservable(this, {
       authors: observable,
