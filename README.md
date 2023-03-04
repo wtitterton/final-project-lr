@@ -40,9 +40,10 @@ The main purpose of a gateway is to abstract I/O processes, such as API calls. I
 - Inversify IOC container
 
 ## Installation Steps
+
 - run `yarn install`
 - run `yarn dev`
 
 ## Run Tests
-`yarn test`
 
+`yarn test`
