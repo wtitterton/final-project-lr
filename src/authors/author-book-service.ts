@@ -26,7 +26,7 @@ export class AuthorBookService {
   }
 
   load = async () => {
-    return await this.getAuthorsAndBooks();
+    this.authorWithBooks = await this.getAuthorsAndBooks();
   };
 
   private constructAuthorPmWithBooksResponse = async (
@@ -34,11 +34,12 @@ export class AuthorBookService {
   ): Promise<AuthorWithBooks> => {
     const books = await this.booksRepository.getBooksById(author.bookIds);
     const { id, name } = author;
-    return {
+    const aurthorWithBooksPm: AuthorWithBooks = {
       id,
       name,
       books: books,
-    };
+    }
+    return aurthorWithBooksPm;
   };
 
   getAuthorsAndBooks = async (): Promise<AuthorWithBooks[]> => {
