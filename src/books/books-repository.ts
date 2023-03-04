@@ -39,7 +39,7 @@ export class BooksRepository {
   public booksPm: BooksPm[] = [];
   public lastAddedBookName: string | null = null;
   public loading: boolean = false;
- 
+
   constructor(
     @inject(Types.IDataGateway) private httpGateway: HttpGateway,
     @inject(UserModel) private userModel: UserModel

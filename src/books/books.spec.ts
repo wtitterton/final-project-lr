@@ -35,7 +35,7 @@ describe("Loading books", () => {
     );
 
     expect(books.length).toBe(4);
-    
+
     // Spot check
     expect(books[1].visibleName).toBe("I, Robot");
     expect(books[3].visibleName).toBe("Wind In The Willows 2");

@@ -29,7 +29,7 @@ export class BooksPresenter
   }
 
   get loading() {
-    return this.booksRepository.loading
+    return this.booksRepository.loading;
   }
 
   set lastAddedBookName(newLastAddedBookName) {

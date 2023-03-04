@@ -18,7 +18,7 @@ export const AddBooks = observer(({ presenter }: AddBooksProps) => {
     event.preventDefault();
     try {
       updateClientValidationMessages([]);
-      validateInput(addBookSchema, {name: bookName});
+      validateInput(addBookSchema, { name: bookName });
       presenter.addBook(bookName);
       setBookName("");
     } catch (error: any) {
