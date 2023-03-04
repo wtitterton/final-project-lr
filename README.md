@@ -38,3 +38,12 @@ The main purpose of a gateway is to abstract I/O processes, such as API calls. I
 
 - Mobx/react-mobx (Aides communication between our app and the react libary)
 - Inversify IOC container
+
+## Installation Steps
+
+- run `yarn install`
+- run `yarn dev`
+
+## Run Tests
+
+`yarn test`
