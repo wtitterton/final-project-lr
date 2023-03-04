@@ -55,9 +55,8 @@ export class AuthorBookService {
   };
 
   addAuthorAndBooks = async (authorName: string): Promise<IMessagePacking> => {
-    const bookPromises = this.booksRepository.booksPm.map((book: BooksPm) =>
-      this.booksRepository.addBook(book.name)
-    );
+    const bookNames = this.booksRepository.booksPm.map((book: BooksPm) => book.name);
+    const bookPromises = await this.booksRepository.addBooks(bookNames);
 
     const booksPm = await Promise.all(bookPromises);
     const addAuthorPm = await this.authorsRepository.addAuthorAndBooks(
@@ -73,7 +72,7 @@ export class AuthorBookService {
   addBook = async (name: string) => {
     this.booksRepository.booksPm = [
       ...this.booksRepository.booksPm,
-      { name: name, id: uuidv4() },
+      { name: name, id: uuidv4() }, // local id to be used as react component key
     ];
   };
 

@@ -74,6 +74,11 @@ export class BooksRepository {
     });
   };
 
+  addBooks = async (bookNames: string[]):Promise<IMessagePacking[]> => {
+    const booksPromises = bookNames.map((bookName: string) => this.addBook(bookName));
+    return await Promise.all(booksPromises);
+  }
+
   addBook = async (name: string): Promise<IMessagePacking> => {
     if (this.userModel.email === null) {
       throw new Error("user model email not set!");
