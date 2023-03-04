@@ -10,13 +10,6 @@ export const Authors = observer(() => {
   const authorsPresenter = useInjection(AuthorsPresenter);
   const [toggleShowAuthors, setToggleShowAuthors] = useState(false);
 
-  useEffect(() => {
-    const load = async () => {
-      await authorsPresenter.load();
-    };
-    load();
-  }, []);
-
   // When authors changes get value of computed property
   useEffect(() => {
     setToggleShowAuthors(authorsPresenter.toggleShowAuthors);
