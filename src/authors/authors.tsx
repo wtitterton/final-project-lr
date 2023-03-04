@@ -29,7 +29,7 @@ export const Authors = observer(() => {
         value="show author list"
         type="button"
         onClick={() => {
-          setToggleShowAuthors(!toggleShowAuthors)
+          setToggleShowAuthors(!toggleShowAuthors);
         }}
       />
 

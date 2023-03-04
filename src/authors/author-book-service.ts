@@ -38,7 +38,7 @@ export class AuthorBookService {
       id,
       name,
       books: books,
-    }
+    };
     return aurthorWithBooksPm;
   };
 

@@ -17,7 +17,7 @@ export class AuthorsPresenter
   implements AddBooksPresenter
 {
   public authors: AuthorVm[] = [];
- 
+
   constructor(
     @inject(AuthorBookService) private authorsBooksService: AuthorBookService,
     @inject(MessagesRepository) private _messagesRepository: MessagesRepository
@@ -45,7 +45,7 @@ export class AuthorsPresenter
   };
 
   get toggleShowAuthors() {
-    return this.authors.length <= 4
+    return this.authors.length <= 4;
   }
 
   addBook = async (name: string) => {

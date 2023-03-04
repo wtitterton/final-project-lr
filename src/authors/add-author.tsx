@@ -16,7 +16,7 @@ export const AddAuthor = observer(() => {
     event.preventDefault();
     try {
       updateClientValidationMessages([]);
-      validateInput(addAuthorSchema, {name: authorName});
+      validateInput(addAuthorSchema, { name: authorName });
       authorPresenter.addAuthor(authorName);
       setAuthorName("");
     } catch (error: any) {
