@@ -47,7 +47,7 @@ describe("Adding books", () => {
     appTestHarness = new AppTestHarness();
     appTestHarness.bootStrap(onRouteChange);
     booksPresenter = appTestHarness.container.get(BooksPresenter);
-    booksRepository = appTestHarness.container.get(BooksRepository);
+    booksRepository = appTestHarness.container.get(Types.IBooksRepository);
     httpGateway = appTestHarness.container.get(Types.IDataGateway);
     await appTestHarness.setupLogin(GetSuccessfulUserLoginStub);
   });

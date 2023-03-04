@@ -10,8 +10,9 @@ import { AuthorBookService } from "../authors/author-book-service";
 @injectable()
 export class RouterRepository {
   constructor(
-    @inject(BooksRepository) private booksRepository: BooksRepository,
-    @inject(AuthorBookService) private authorsBooksService: AuthorBookService,
+    @inject(Types.IBooksRepository) private booksRepository: BooksRepository,
+    @inject(Types.IAuthorsRepository)
+    private authorsBooksService: AuthorBookService,
     @inject(Types.IRouterGateway) private routerGateway: RouterGateway
   ) {
     makeObservable(this, {
@@ -42,7 +43,6 @@ export class RouterRepository {
         await this.booksRepository.load();
       },
       onLeave: () => {
-        console.log("leaving");
         this.booksRepository.reset();
       },
     },

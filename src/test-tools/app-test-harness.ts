@@ -4,7 +4,7 @@ import { FakeRouterGateway, Router, RouterRepository } from "../routing";
 import { LoginRegisterPresenter } from "../authentication";
 import { AppPresenter } from "../app-presenter";
 import { Container } from "inversify";
-import { BookDto, BooksRepository, GetBooksResponse } from "../books";
+import { BooksRepository, GetBooksResponse } from "../books";
 import { BooksListPresenter } from "../books/books-list-presenter";
 import { SingleBooksResultStub } from "./single-books-result-stub";
 import { GetSuccessfulBookAddedStub } from "./get-successful-book-added-stub";
@@ -12,6 +12,8 @@ import { BooksPresenter } from "../books/books-presenter";
 import { SingleAuthorsResultStub } from "./single-authors-result-stub";
 import { AuthorsPresenter } from "../authors";
 import { SingleBookResultStub } from "./single-book-result-stub";
+import { GetSuccessfulAuthorAddedStub } from "./get-succesful-author-added-stub";
+import { AuthorDto } from "../authors/authors-repository";
 
 interface RegistratonCredentials {
   email: string;
@@ -42,7 +44,7 @@ export class AppTestHarness {
     this.httpGateway = this.container.get(FakeHttpGateway);
     this.appPresenter = this.container.get(AppPresenter);
     this.router = this.container.get(Types.IRouter);
-    this.routerRepository = this.container.get(RouterRepository);
+    this.routerRepository = this.container.get(Types.IRouterRepository);
     this.routerGateway = this.container.get(Types.IRouterGateway);
     this.loginRegisterPresenter = this.container.get(LoginRegisterPresenter);
     this.booksListPresenter = this.container.get(BooksListPresenter);
@@ -98,7 +100,9 @@ export class AppTestHarness {
   ): Promise<BooksListPresenter> => {
     this.httpGateway = this.container.get(Types.IDataGateway);
     this.httpGateway.get = jest.fn().mockResolvedValue(getBooksStub());
-    const booksRepository = this.container.get(BooksRepository);
+    const booksRepository: BooksRepository = this.container.get(
+      Types.IBooksRepository
+    );
     await booksRepository.load();
 
     return this.booksListPresenter;
@@ -129,16 +133,16 @@ export class AppTestHarness {
     return this.booksListPresenter;
   };
 
-  setupLoadAuthors = async (
+  private setupStubsForBookAPICalls = (
     bookNames: string[],
-    numberOfResults?: number
-  ): Promise<AuthorsPresenter> => {
-    this.httpGateway = this.container.get(Types.IDataGateway);
+    numberOfResults?: number,
+    additionalAuthors: AuthorDto[] = []
+  ) => {
     const { success, result } = SingleAuthorsResultStub();
 
     const authorsResponse = {
       success,
-      result,
+      result: [...result, ...additionalAuthors],
     };
 
     if (numberOfResults !== undefined && numberOfResults < result.length) {
@@ -155,7 +159,63 @@ export class AppTestHarness {
       });
     });
 
-    this.httpGateway.get = mockResponses;
+    return mockResponses;
+  };
+
+  setupAddAuthor = async (
+    authorName: string,
+    booksNames: string[] = [],
+    bookIds: number[] = []
+  ): Promise<AuthorsPresenter> => {
+    const { success, result } = SingleAuthorsResultStub();
+
+    const mockedAddAuthorAndBooksResponses = jest.fn();
+    // setup books api call responses
+    for (const bookId of bookIds) {
+      mockedAddAuthorAndBooksResponses.mockResolvedValueOnce(
+        GetSuccessfulBookAddedStub(bookId)
+      ); // sequencial ids
+    }
+
+    // add staged books
+    for (const bookName of booksNames) {
+      this.authorPresenter.addBook(bookName);
+    }
+
+    const authorId = result.length + 1; // sequencial ids
+
+    const newAuthor = {
+      authorId: authorId,
+      name: authorName,
+      bookIds: bookIds,
+      latLon: "51.4556852, -0.9904706",
+    };
+
+    // mock add author response
+    mockedAddAuthorAndBooksResponses.mockResolvedValue(
+      GetSuccessfulAuthorAddedStub(authorId)
+    );
+
+    this.httpGateway.post = mockedAddAuthorAndBooksResponses;
+    this.httpGateway.get = this.setupStubsForBookAPICalls(
+      booksNames,
+      result.length + 1, // include the new author
+      [newAuthor]
+    );
+
+    await this.authorPresenter.addAuthor(authorName);
+    return this.authorPresenter;
+  };
+
+  setupLoadAuthors = async (
+    bookNames: string[],
+    numberOfResults?: number
+  ): Promise<AuthorsPresenter> => {
+    this.httpGateway = this.container.get(Types.IDataGateway);
+    this.httpGateway.get = this.setupStubsForBookAPICalls(
+      bookNames,
+      numberOfResults
+    );
 
     await this.authorPresenter.load();
     return this.authorPresenter;
