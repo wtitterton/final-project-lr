@@ -11,7 +11,7 @@ import { AuthorBookService } from "../authors/author-book-service";
 export class RouterRepository {
   constructor(
     @inject(Types.IBooksRepository) private booksRepository: BooksRepository,
-    @inject(Types.IAuthorsRepository)
+    @inject(AuthorBookService)
     private authorsBooksService: AuthorBookService,
     @inject(Types.IRouterGateway) private routerGateway: RouterGateway
   ) {
@@ -51,6 +51,9 @@ export class RouterRepository {
       routeDef: {
         path: "/app/authors",
         isSecure: true,
+      },
+      onEnter: async () => {
+        await this.authorsBooksService.load();
       },
       onLeave: () => {
         this.authorsBooksService.reset();

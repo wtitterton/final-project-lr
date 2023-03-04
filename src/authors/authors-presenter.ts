@@ -16,15 +16,13 @@ export class AuthorsPresenter
   extends MessagesPresenter
   implements AddBooksPresenter
 {
-  public authors: AuthorVm[] = [];
-
   constructor(
     @inject(AuthorBookService) private authorsBooksService: AuthorBookService,
     @inject(MessagesRepository) private _messagesRepository: MessagesRepository
   ) {
     super(_messagesRepository);
     makeObservable(this, {
-      authors: observable,
+      authors: computed,
       toggleShowAuthors: computed,
     });
   }
@@ -33,16 +31,15 @@ export class AuthorsPresenter
     return books.map((book: BooksPm) => book.name).join(",");
   };
 
-  load = async () => {
-    await this.authorsBooksService.load();
-    this.authors = this.authorsBooksService.authorWithBooks.map(
+  get authors() {
+    return this.authorsBooksService.authorWithBooks.map(
       (author: AuthorWithBooks): AuthorVm => ({
         id: author.id,
         name: author.name,
         books: this.formatBooksString(author.books),
       })
     );
-  };
+  }
 
   get toggleShowAuthors() {
     return this.authors.length <= 4;
@@ -58,8 +55,8 @@ export class AuthorsPresenter
     );
 
     if (addAuthorPm.success) {
-      await this.load();
       this.authorsBooksService.reset();
+      await this.authorsBooksService.load();
     }
 
     this.unpackRepositoryPmToVm(addAuthorPm, "Aurthor Added");

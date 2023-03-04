@@ -24,7 +24,6 @@ export interface GetAuthorsResponse {
 
 @injectable()
 export class AuthorsRepository {
-  public messagePm: string = "UNSET";
   public authors: AuthorPm[] = [];
 
   constructor(
@@ -34,15 +33,12 @@ export class AuthorsRepository {
   ) {
     makeObservable(this, {
       authors: observable,
-      messagePm: observable,
     });
   }
 
-  load = async () => {
-    this.messagePm = "LOADING";
-    this.authors = await this.getAuthors();
-    this.messagePm = "";
-  };
+  // load = async () => {
+  //   this.authors = await this.getAuthors();
+  // };
 
   getAuthors = async (): Promise<AuthorPm[]> => {
     const authorDto = await this.httpGateway.get<GetAuthorsResponse>(
@@ -80,7 +76,6 @@ export class AuthorsRepository {
   };
 
   reset = () => {
-    this.messagePm = "UNSET";
     this.authors = [];
   };
 }

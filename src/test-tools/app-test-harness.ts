@@ -14,6 +14,7 @@ import { AuthorsPresenter } from "../authors";
 import { SingleBookResultStub } from "./single-book-result-stub";
 import { GetSuccessfulAuthorAddedStub } from "./get-succesful-author-added-stub";
 import { AuthorDto } from "../authors/authors-repository";
+import { AuthorBookService } from "../authors/author-book-service";
 
 interface RegistratonCredentials {
   email: string;
@@ -218,7 +219,10 @@ export class AppTestHarness {
       numberOfResults
     );
 
-    await this.authorPresenter.load();
+    const authorBooksService: AuthorBookService =
+      this.container.get(AuthorBookService);
+
+    await authorBooksService.load();
     return this.authorPresenter;
   };
 }
