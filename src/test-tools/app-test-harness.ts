@@ -153,8 +153,9 @@ export class AppTestHarness {
 
     authorsResponse.result.forEach((author) => {
       author.bookIds.forEach((bookId: number) => {
+        const bookNamesIndex = bookId - 1;
         mockResponses.mockResolvedValueOnce(
-          SingleBookResultStub(bookId, bookNames[bookId - 1])
+          SingleBookResultStub(bookId, bookNames[bookNamesIndex])
         );
       });
     });
