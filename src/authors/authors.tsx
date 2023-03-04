@@ -17,7 +17,7 @@ export const Authors = observer(() => {
     load();
   }, []);
 
-  // When author changes get value of computed property
+  // When authors changes get value of computed property
   useEffect(() => {
     setToggleShowAuthors(authorsPresenter.toggleShowAuthors);
   }, [authorsPresenter.authors]);
